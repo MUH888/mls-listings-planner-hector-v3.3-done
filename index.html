@@ -1,15 +1,78 @@
 <html>
 <head>
-  <title>Excel Data Testing</title>
+  <title>Real Estate Listings</title>
+  <meta name='viewport' content='initial-scale=1.0'>
+  <meta charset='utf-8'>
+
+  <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
+  <link rel='stylesheet' href='style.css' type='text/css'>
 </head>
 <body>
-  <h1>Excel Data Testing</h1>
+  <div class='container'>
+    <!-- Header. -->
+    <div class='row mt-4'>
+      <div class='col'>
+        <div class='jumbotron'>
+          <h1 class='display-4'>Real Estate Listings</h1>
+          <p class='lead'>Plan routes, get directions, meet with clients.</p>
+        </div>
+      </div>
+    </div>
 
-  <label for='excel'>Excel file:</label>
-  <br>
-  <input id='excel' type='file'>
+    <!-- Main content. -->
+    <div class='row'>
+      <div class='col-md-6'>
+        <h3>Import</h3>
+        <div class='custom-file'>
+          <input type='file' class='custom-file-input' id='excel' aria-describedby='excel'>
+          <label class='custom-file-label' for='excel'>Choose an Excel file...</label>
+        </div>
+      </div>
+      <div class='col-md-6'>
+        <h3>Summary</h3>
+        <p class='sheetSummaryMessage' id='default'>You have not yet imported any data.</p>
+        <p class='sheetSummaryMessage' id='count'></p>
+      </div>
+    </div>
 
+    <div class='row mt-4'>
+      <div class='col-sm-8'>
+        <h3>Map</h3>
+        <div id='map'></div>
+      </div>
+      <div class='col-sm-4'>
+        <h3>Route</h3>
+        <h5>Table</h5>
+        <p>No table generated yet.</p>
+
+        <h5>String</h5>
+        <p>No string generated yet.</p>
+
+        <button class='btn btn-primary'>Email</button>
+      </div>
+    </div>
+
+    <!-- Footer. -->
+    <div class='row'>
+        <div class='col text-center mt-4'>
+            <h6>Developed by Bryce St. Pierre</h6>
+            <p>Made in Ottawa.</p>
+        </div>
+      </div>
+  </div>
+
+  <!-- Bootstrap scripts. -->
+  <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js' integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1' crossorigin='anonymous'></script>
+  <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js' integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM' crossorigin='anonymous'></script>
+  
+  <!-- Library scripts. -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js'></script>
   <script src='script.js'></script>
+
+  <!-- Google Maps scripts. -->
+  <script src='map.js'></script>
+  <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDaSWoEDVlWC6ellCADKvjz4poo9boa-oA&callback=initializeMap'></script>
+
 </body>
 </html>
