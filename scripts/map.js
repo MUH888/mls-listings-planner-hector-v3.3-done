@@ -4,7 +4,7 @@ var markers;
 function createMap () {
   var options = {
     center: { lat: 25.763, lng: -80.193 },
-    zoom: 10
+    zoom: 11
   };
 
   map = new google.maps.Map(document.getElementById('map'), options);
