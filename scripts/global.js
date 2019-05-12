@@ -1,8 +1,10 @@
+var listings;
+var listingsByStatus;
+var locationCache;
+//var filterByStatus;
+
 $(function () {
-
-  var listings;
-  var statusFilter;
-
+  
   createMap();
 
   $('#greeting').text(greeting());
@@ -14,12 +16,6 @@ $(function () {
 
     if (e.target.files.length < 1)
       return;
-
-    //var filename = ;
-    // console.log({
-    //   filename: e.target.files[0].name,
-    //   file: e.target.files[0]
-    // });
 
     readExcelData(e.target.files[0], function (err, data) {
     
@@ -45,22 +41,25 @@ $(function () {
         .sort()
       );
 
-      var summary = {};
-      statusFilter = {};
+      //var summary = {};
+      var filterByStatus = {};
+      listingsByStatus = {};
+      locationCache = {};
 
       statuses.forEach(function (s) {
-        summary[s] = listings.filter(function (l) { 
+        listingsByStatus[s] = listings.filter(function (l) { 
           return l['Listing Status'] === s;
-        }).length;
+        });
 
-        statusFilter[s] = false;
+        filterByStatus[s] = false;
+        locationCache[s] = false;
       });
       
       $('#excelFileLabel').text('File: ' + filename)
       $('#excelRowCount').text(listings.length);
       $('#excelFileName').text(filename);
 
-      console.log(summary);
+      //console.log(summary);
 
       statuses.forEach(function (s) {
         var $div = $('<div />').attr('class', 'form-check');
@@ -70,7 +69,7 @@ $(function () {
           .attr('value', s);
         var $label = $('<label />')
           .attr('class', 'form-check-label')
-          .html(s + ' <span class="badge badge-primary">' + summary[s] + '</span>');
+          .html(s + ' <span class="badge badge-primary">' + listingsByStatus[s].length + '</span>');
 
         $div.append($input);
         $div.append($label);
@@ -79,8 +78,11 @@ $(function () {
       });
 
       $('.form-check-input').change(function (e) {
-        statusFilter[e.target.value] = !statusFilter[e.target.value];
-        console.log(statusFilter);
+        filterByStatus[e.target.value] = !filterByStatus[e.target.value];
+        console.log(filterByStatus);
+
+        //console.log(listingsByStatus);
+        addMarkersToMap(e.target.value, filterByStatus[e.target.value]);
       });
 
       //console.log({ data: data });
