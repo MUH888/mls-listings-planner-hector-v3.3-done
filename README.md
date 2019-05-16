@@ -1,2 +1,2 @@
-# Real Estate Listing Map
-Real estate listings sourced from an Excel file and used with the Google Maps API.
+# MLS Listings Map
+Web application that makes use of the Google Maps API to manage MLS listings sourced from an Excel file.
