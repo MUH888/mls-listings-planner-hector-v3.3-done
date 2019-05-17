@@ -2,10 +2,12 @@ var data = {},
     options = {};
 
 $(function () {
-  
   createMap();
 
   $('#greeting').text(greeting());
+
+  if (!verifyStorage())
+    $('#webStorageError').removeClass('hidden');
 
   $('#excel').change(function (e) {
 

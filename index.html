@@ -18,6 +18,10 @@
     </span>
 </nav>
 
+<div id='webStorageError' class='alert alert-danger text-center hidden' role='alert'>
+  <b>Error: </b>There is no HTML web storage available. Please use the latest version of Chrome or Firefox.
+</div>
+
 <!-- Main content. -->
 <div class='container-fluid'>
   <div class='row mt-3'>
@@ -90,6 +94,7 @@
 <!-- Web app scripts. -->
 <script src='js/global.js'></script>
 <script src='js/greeting.js'></script>
+<script src='js/localStorage.js'></script>
 <script src='js/map.js'></script>
 <script src='js/processData.js'></script>
 <script src='js/readExcelData.js'></script>
