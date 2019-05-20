@@ -14,8 +14,11 @@
 <nav class='navbar navbar-dark bg-primary'>
     <span class='navbar-brand'>MLS Listings Map</span>
     <span class='navbar-text'>
-        <span id='greeting'>Hello</span>, Hector.
+      <a href='https://console.cloud.google.com/google/maps-apis/overview' target='_blank'>Check API Usage</a>
     </span>
+    <span class='navbar-text'>
+      <span id='greeting'>Hello</span>, Hector.
+  </span>
 </nav>
 
 <div id='webStorageError' class='alert alert-danger text-center hidden' role='alert'>
@@ -31,37 +34,43 @@
 
       <!-- Import file section. -->
       <h4>Data</h4>
-      <p>Import an Excel workbook of MLS listings data.</p>
+      <p>Import an Excel workbook of MLS listings.</p>
       <div class='custom-file'>
         <input type='file' id='excel' class='custom-file-input' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel'>
         <label class='custom-file-label' for='excel'>No file selected.</label>
       </div>
 
       <!-- Options section. -->
-      <h4 class='mt-3'>Options</h4>
-      <div id='excelMessageStart' class='alert alert-primary' role='alert'>
-        No data imported.
-      </div>
-      <div id='excelMessageError' class='alert alert-danger hidden' role='alert'>
-        <b>Error:</b> there is a problem.
-      </div>
-
-      <!-- Import success section. -->
-      <div id='excelImportLoading' class='text-center mt-4 mb-4 hidden'>
-        <div class='spinner-border' role='status'></div>
-      </div>
-
-      <div id='excelImportSuccess' class='hidden'>
-        <div class='alert alert-success' role='alert'>
-          Imported <b id='excelRowCount'>0</b> listings from <b id='excelFileName'>filename</b>.
+      <div id='sectionOptions'>
+        <h4 class='mt-3'>Options</h4>
+        <div id='excelMessageStart' class='alert alert-primary' role='alert'>
+          No data imported.
         </div>
-    
-        <div id='filterByListingStatus'>
-          <h5>Filter by Listing Status</h5>
-
+        <div id='excelMessageError' class='alert alert-danger hidden' role='alert'>
+          <b>Error:</b> there is a problem.
         </div>
-        <button id='buttonPlot' class='btn btn-primary mt-2'>Plot</button>
+  
+        <!-- Import success section. -->
+        <div id='excelImportLoading' class='text-center mt-4 mb-4 hidden'>
+          <div class='spinner-border' role='status'></div>
+        </div>
+  
+        <div id='excelImportSuccess' class='hidden'>
+          <div class='alert alert-success' role='alert'>
+            Imported <b id='excelRowCount'>0</b> listings from <b id='excelFileName'>filename</b>.
+          </div>
+          <div id='filterByListingStatus'>
+            <h5>Filter by Listing Status</h5>
+          </div>
+          <button id='buttonPlot' class='btn btn-primary mt-2'>Plot</button>
+        </div>
       </div>
+
+      <!-- Summary section. -->
+      <div id='sectionSummary'>
+
+      </div>
+      
     </div>
 
     <!-- Right panel. -->

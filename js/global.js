@@ -2,7 +2,7 @@ var data = {},
     options = {};
 
 $(function () {
-  createMap();
+  //createMap();
 
   $('#greeting').text(greeting());
 
