@@ -18,16 +18,24 @@ function createMap () {
   };
 
   directionsService = new google.maps.DirectionsService;
-  directionsDisplay = new google.maps.DirectionsRenderer;
+  directionsDisplay = new google.maps.DirectionsRenderer({ 
+    preserveViewport: true
+  });
 
   map = new google.maps.Map(document.getElementById('map'), options);
+
+  // Create the DIV to hold the control and call the CenterControl()
+  // constructor passing in this DIV.
+  var centerControlDiv = document.createElement('div');
+  var centerControl = new CenterControl(centerControlDiv);
+
+  centerControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
 
   directionsDisplay.setMap(map);
 
   poly = new google.maps.Polyline({
-    strokeColor: '#000000',
-    strokeOpacity: 1.0,
-    strokeWeight: 3
+    strokeOpacity: 0
   });
   poly.setMap(map);
 
@@ -45,46 +53,76 @@ function createMap () {
   });
 }
 
+function CenterControl(controlDiv) {
+
+  // Set CSS for the control border.
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = '#fff';
+  controlUI.style.border = '2px solid #fff';
+  controlUI.style.borderRadius = '3px';
+  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.marginTop = '8px';
+  controlUI.style.marginBottom = '22px';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Click to undo last stop.';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior.
+  var controlText = document.createElement('div');
+  controlText.style.color = 'rgb(25,25,25)';
+  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+  controlText.style.fontSize = '16px';
+  controlText.style.lineHeight = '38px';
+  controlText.style.paddingLeft = '5px';
+  controlText.style.paddingRight = '5px';
+  controlText.innerHTML = 'Undo Last Stop';
+  controlUI.appendChild(controlText);
+
+  // Setup the click event listeners: simply set the map to Chicago.
+  controlUI.addEventListener('click', function() {
+    var newPath = poly.getPath();
+    newPath.pop();
+    poly.setPath(newPath);
+    updateDirections(poly.getPath());
+  });
+}
+
 function addToList (event) {
   var path = poly.getPath();
-
-  console.log({ lat: event.latLng.lat, lng: event.latLng.lng });
-
   path.push(event.latLng);
 
-  console.log(path);
+  updateDirections(path);
+}
 
+function updateDirections (path) {
+  if (path.getLength() <= 1)
+    return;
 
-  var waypts = [];
+  var waypoints = [];
 
+  path.forEach(function (e, i) {
+    if (i !== 0 && i !== path.getLength() - 1) {
+      waypoints.push({
+        location: path.getAt(i),
+        stopover: true
+      });
+    }
+  });
 
-  // directionsService.route({
-  //   origin: document.getElementById('start').value,
-  //   destination: document.getElementById('end').value,
-  //   waypoints: waypts,
-  //   optimizeWaypoints: true,
-  //   travelMode: 'DRIVING'
-  // }, function(response, status) {
-  //   if (status === 'OK') {
-  //     directionsDisplay.setDirections(response);
-  //     // var route = response.routes[0];
-  //     // var summaryPanel = document.getElementById('directions-panel');
-  //     // summaryPanel.innerHTML = '';
-  //     // // For each route, display summary information.
-  //     // for (var i = 0; i < route.legs.length; i++) {
-  //     //   var routeSegment = i + 1;
-  //     //   summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
-  //     //       '</b><br>';
-  //     //   summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
-  //     //   summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
-  //     //   summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
-  //     // }
-  //   } else {
-  //     window.alert('Directions request failed due to ' + status);
-  //   }
-  // });
-  
-
+  directionsService.route({
+    origin: path.getAt(0),
+    destination: path.getAt(path.getLength() - 1),
+    waypoints: waypoints,
+    optimizeWaypoints: true,
+    travelMode: 'DRIVING'
+  }, function(response, status) {
+    if (status === 'OK') {
+      directionsDisplay.setDirections(response);
+    } else {
+      window.alert('Directions request failed due to ' + status);
+    }
+  });
 }
 
 $(function () {
