@@ -1,4 +1,4 @@
-function readExcelData (file, callback) {
+function readData (file, callback) {
   var reader = new FileReader();
 
   reader.onload = function (e) {

@@ -36,7 +36,7 @@
       <h4>Data</h4>
       <p>Import an Excel workbook of MLS listings.</p>
       <div class='custom-file'>
-        <input type='file' id='excel' class='custom-file-input' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel'>
+        <input type='file' id='excel' class='custom-file-input' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'>
         <label class='custom-file-label' for='excel'>No file selected.</label>
       </div>
 
@@ -60,17 +60,45 @@
             Imported <b id='excelRowCount'>0</b> listings from <b id='excelFileName'>filename</b>.
           </div>
           <div id='filterByListingStatus'>
-            <h5>Filter by Listing Status</h5>
+            <p>Select MLS listings by listing status.</p>
           </div>
-          <button id='buttonPlot' class='btn btn-primary mt-2'>Plot</button>
+
+          <button id='buttonNext' class='btn btn-primary mt-2'>Next</button>
+        </div>
+      </div>
+
+      <!-- Progress section. -->
+      <div id='sectionProgress' class='hidden'>
+        <p>Geocoding MLS listings...</p>
+        <div class='progress'>
+          <div id='progressBar' class='progress-bar progress-bar-striped' role='progressbar' style='width:0%'>0%</div>
         </div>
       </div>
 
       <!-- Summary section. -->
-      <div id='sectionSummary'>
+      <div id='sectionRoute' class='hidden'>
+        <h4 class='mt-3'>Route</h4>
+        <div id='routeMessageStart' class='alert alert-primary' role='alert'>
+          No route created.
+        </div>
 
+        <div id='resultContainer' class='hidden'>
+          <h5>Table</h5>
+          <table id='resultTable' class='table table-bordered text-center'>
+            <thead class='thead-dark'>
+              <th scope='col'></th>
+              <th scope='col'>MLS ID</th>
+              <th scope='col'>Notes</th>
+            </thead>
+            <tbody id='resultTableBody'></tbody>
+          </table>
+  
+          <h5>String</h5>
+          <p id='resultString'></p>
+
+          <button id='buttonBack' class='btn btn-primary mt-2 hidden'>Back</button>
+        </div>
       </div>
-      
     </div>
 
     <!-- Right panel. -->
@@ -102,10 +130,24 @@
 
 <!-- Web app scripts. -->
 <script src='js/global.js'></script>
-<script src='js/greeting.js'></script>
-<script src='js/localStorage.js'></script>
-<script src='js/map.js'></script>
-<script src='js/processData.js'></script>
-<script src='js/readExcelData.js'></script>
+<script src='js/app.js'></script>
+
+<script src='js/data/cacheData.js'></script>
+<script src='js/data/processData.js'></script>
+<script src='js/data/readData.js'></script>
+
+<script src='js/interface/appendListingStatusFilter.js'></script>
+<script src='js/interface/appendRouteString.js'></script>
+<script src='js/interface/appendRouteTable.js'></script>
+<script src='js/interface/getGreeting.js'></script>
+<script src='js/interface/setProgress.js'></script>
+
+<script src='js/map/createMap.js'></script>
+<script src='js/map/geocodeMap.js'></script>
+<script src='js/map/populateMap.js'></script>
+<script src='js/map/updateDirections.js'></script>
+
+<script src='js/utils/storage.js'></script>
+
 </body>
 </html>

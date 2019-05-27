@@ -1,24 +1,21 @@
-var map, 
-    markers,
-    stopArray,
-    directionsService, 
-    directionsDisplay;
-
-var coords = [
-  { lat: 41.879, lng: -87.624},
-  { lat: 41.4, lng: -88.624 },
-  { lat: 41.4, lng: -87.624 },
-  { lat: 41.55, lng: -87.75 },
-  { lat: 41.23, lng: -86.7 }
-];
-
-function createMap () {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: { lat: 41.55, lng: -87.75 },
+function createMap (elementId) {
+  
+  map = new google.maps.Map(document.getElementById(elementId), {
+    center: { lat: 25.763, lng: -80.193 },  // Miami, FL.
     mapTypeControl: false,
     rotateControl: false,
-    zoom: 9
+    zoom: 11
   });
+  infoWindow = new google.maps.InfoWindow({
+    maxWidth: 250
+  });
+  bounds = new google.maps.LatLngBounds();
+  geocoder = new google.maps.Geocoder();
+  markers = [];
+
+  // map.addListener('click', function () {
+  //   infoWindow.close();
+  // });
 
   stopArray = new google.maps.MVCArray();
   directionsService = new google.maps.DirectionsService;
@@ -32,23 +29,14 @@ function createMap () {
   customControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(customControlDiv);
 
-  markers = [];
-  markers = coords.map(function (c) {
-    return new google.maps.Marker({
-      position: c,
-      map: map
-    });
-  });
-
-  markers.forEach(function (m) {
-    m.addListener('click', function (e) {
-      stopArray.push(e.latLng);
-      updateDirections();
-    });
-  });
-
   directionsDisplay.addListener('directions_changed', function () {
     console.log('Directions changed.');
+    
+    $('#routeMessageStart').addClass('hidden');
+    $('#resultContainer').removeClass('hidden');
+
+    appendRouteTable();
+    appendRouteString();
   });
 }
 
@@ -115,41 +103,3 @@ function CustomControls (controlDiv) {
     updateDirections();
   });
 }
-
-function updateDirections () {
-
-  if (stopArray.getLength() <= 1) {
-    directionsDisplay.setMap(null);
-    return;
-  }
-  var waypoints = [];
-
-  stopArray.forEach(function (stop, i) {
-    if (i !== 0 && i !== stopArray.getLength() - 1) {
-      waypoints.push({
-        location: stop,
-        stopover: true
-      });
-    }
-  });
-
-  directionsDisplay.setMap(map);
-
-  directionsService.route({
-    origin: stopArray.getAt(0),
-    destination: stopArray.getAt(stopArray.getLength() - 1),
-    waypoints: waypoints,
-    optimizeWaypoints: true,
-    travelMode: 'DRIVING'
-  }, function(response, status) {
-    if (status === 'OK') {
-      directionsDisplay.setDirections(response);
-    } else {
-      window.alert('Directions request failed due to ' + status);
-    }
-  });
-}
-
-$(function () {
-  createMap();
-});

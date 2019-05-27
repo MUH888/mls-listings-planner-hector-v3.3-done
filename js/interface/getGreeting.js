@@ -1,4 +1,4 @@
-function greeting () {
+function getGreeting () {
   var now = new Date();
   var morning = new Date();
   var afternoon = new Date();

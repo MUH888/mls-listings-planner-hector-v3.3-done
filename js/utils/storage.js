@@ -10,7 +10,7 @@ function setStorageValue (key, value) {
 }
 
 function getStorageValue (key) {
-  return JSON.parse(localStorage[key]);
+  return JSON.parse(localStorage[key] ? localStorage[key] : null);
 }
 
 function removeStorageValue (key) {

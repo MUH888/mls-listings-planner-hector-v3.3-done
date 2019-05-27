@@ -1,78 +1,36 @@
 var data = {},
-    options = {};
+    cache = {};
+    options = {
+      listingStatusFilter: {}
+    },
+    progress = 0;
 
-$(function () {
-  //createMap();
-
-  $('#greeting').text(greeting());
-
-  if (!verifyStorage())
-    $('#webStorageError').removeClass('hidden');
-
-  $('#excel').change(function (e) {
-
-    if (e.target.files.length < 1)
-      return;
-
-    // Hide start message and show loading spinner.
-    $('#excelImportLoading').removeClass('hidden');
-    $('#excelMessageStart').addClass('hidden');
-
-    readExcelData(e.target.files[0], function (err, excelData) {
+var map,
+    bounds,
+    markers,
+    geocoder,
+    infoWindow;  
     
-      if (err) {
-        $('#excelMessageError').removeClass('hidden');
-        $('#excelMessageError').html('<b>Error:</b> ' + err);
-        return;
-      }
+var stopArray,
+    directionsService,
+    directionsDisplay;
 
-      options.filename = e.target.files[0].name;
+var colours = [
+  '#ff4d4d',
+  '#ff9900',
+  '#00cc00',
+  '#3366ff',
+  '#9966ff'
+];
 
-      data = processData(excelData);
-      console.log(data);
+var icons = [
+  'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+  'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
+  'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+  'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+  'http://maps.google.com/mapfiles/ms/icons/purple-dot.png'
+];
 
-      $('#excel').attr('disabled', 'disabled');
-      $('label.custom-file-label').text('File: ' + options.filename);
-      
-      $('#excelImportLoading').addClass('hidden');
-      $('#excelImportSuccess').removeClass('hidden');
-
-      $('#excelRowCount').text(excelData.length);
-      $('#excelFileName').text(options.filename);
-
-      options.listingStatusFilter = {};
-
-      data.statuses.forEach(function (s) {
-        options.listingStatusFilter[s] = false;
-
-        var $div = $('<div />').attr('class', 'form-check');
-        var $input = $('<input />')
-          .attr('class', 'form-check-input')
-          .attr('type', 'checkbox')
-          .attr('value', s);
-        var $i = $('<i />')
-          .attr('class', 'fa fa-map-marker fa-lg mr-1')
-          .attr('style', 'color:' +  data.colours[s].colour);
-        var $label = $('<label />')
-          .attr('class', 'form-check-label')
-          .html(s + ' <span class="badge badge-primary">' + data.listingsByStatus[s].length + '</span>');
-
-        $div.append($input);
-        $div.append($i);
-        $div.append($label);  
-        $('#filterByListingStatus').append($div);
-      });
-
-      $('.form-check-input').change(function (e) {
-        options.listingStatusFilter[e.target.value] = !options.listingStatusFilter[e.target.value]
-        console.log(options.listingStatusFilter);
-
-        addMarkers(e.target.value);
-      });
-    });
-  });
-
-  // $('#buttonPlot').click(function () {
-  //   addMarkers()
-  // });
-});
+var letters = [
+  'A','B','C','D','E','F','G','H','I'
+];
