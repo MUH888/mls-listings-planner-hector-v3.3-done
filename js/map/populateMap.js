@@ -28,5 +28,10 @@ function populateMap (listings) {
     bounds.extend(l.latLng);
   });
 
+  console.log({
+    listingCount: listings.length,
+    markerCount: markers.length
+  });
+
   map.fitBounds(bounds);
 }

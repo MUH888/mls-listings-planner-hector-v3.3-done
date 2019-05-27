@@ -44,7 +44,6 @@ $(function () {
       data = processData(excelData);
       console.log(data);
 
-      //$('#excel').attr('disabled', 'disabled');
       $('#excelImportLoading').addClass('hidden');
 
       $('#excelFileName').text(options.filename);
@@ -52,7 +51,6 @@ $(function () {
       
       $('#excelImportSuccess').removeClass('hidden');
 
-      //options.listingStatusFilter = {};
       appendListingStatusFilter();
     });
   });
@@ -70,7 +68,7 @@ $(function () {
     });
 
     geocodeMap(incompleteListings, function (geocodedListings) {
-      console.log(geocodedListings);
+      //console.log(geocodedListings);
 
       geocodedCache = {};
       geocodedListings.forEach(function (l) {
@@ -83,28 +81,20 @@ $(function () {
       $('#sectionRoute').removeClass('hidden')
 
       var listings = _.extend(completeListings, geocodedListings);
- 
+      //console.log(listings);
       populateMap(listings);
     });
-
-
-    // populateMap(function () {
-    //   //Progress callback.
-    // }, function () {
-    //   //Success callback.
-    // });
-
-    
-    //$('#sectionRoute').removeClass('hidden');
-
-    //return;
   });
 
   $('#buttonBack').click(function () {
-
     $('#sectionRoute').addClass('hidden');
     $('#sectionOptions').removeClass('hidden');
-
-    //return;
   });
+
+  $('#buttonPdf').click(function () {
+    createPDF();
+  });
+
+  var clipboard = new ClipboardJS('#buttonCopy');
+  
 });

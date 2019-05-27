@@ -13,5 +13,6 @@ function appendRouteString () {
       string += s.mlsId + ', ';
   });
 
+  $('#buttonCopy').attr('data-clipboard-text', string);
   $('#resultString').text(string);
 }
