@@ -1,7 +1,7 @@
 # MLS Listings Map
 A single-page web application that uses the Google Maps JavaScript API, Geocoding API, and Directions API to manage MLS listings from an Excel file.
 
-# Libraries
+## Libraries
 * [Bootstrap](https://getbootstrap.com/)
 * [jQuery](https://jquery.com/)
 * [Underscore.js](https://underscorejs.org/)
