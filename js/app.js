@@ -1,5 +1,5 @@
 $(function () {
-  createMap('map');
+  //createMap('map');
 
   $('#greeting').text(getGreeting());
 
