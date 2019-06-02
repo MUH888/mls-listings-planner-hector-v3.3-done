@@ -5,7 +5,7 @@ function populateMap (listings) {
       map: map,
       title: l.taxAddress,
       position: l.latLng,
-      icon: data.listingStatusStyles[l.listingStatus].icon
+      icon: icons[l.listingStatus]//data.listingStatusStyles[l.listingStatus].icon
     });
 
     m.addListener('click', function () {

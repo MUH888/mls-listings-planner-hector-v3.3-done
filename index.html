@@ -1,11 +1,11 @@
 <html>
 <head>
   <title>MLS Listings Planner</title>
-  <meta http-equiv='content-type' content='text/html; charset=utf-8' />
-  <meta name='viewport' content='initial-scale=1.0, user-scalable=no' />
+  <meta http-equiv='content-type' content='text/html;charset=utf-8' />
+  <meta name='viewport' content='initial-scale=1.0,user-scalable=no' />
 
   <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' type='text/css'>
   <link rel='stylesheet' href='css/style.css' type='text/css'>
 </head>
 <body>
@@ -18,102 +18,132 @@
   </span>
 </nav>
 
+<!-- Web storage error. -->
 <div id='webStorageError' class='alert alert-danger text-center hidden' role='alert'>
   <b>Error: </b>There is no HTML web storage available. Please use the latest version of Chrome or Firefox.
 </div>
 
 <!-- Main content. -->
-<div class='container-fluid'>
-  <div class='row mt-3'>
+<div class='container-fluid mt-3'>
+  <div class='row'>
 
     <!-- Left panel. -->
-    <div class='col-sm-6 col-md-4'>
+    <div class='col-md-4'>
 
       <!-- Import file section. -->
-      <h4>Data</h4>
-      <p>Import an Excel workbook of MLS listings.</p>
-      <div class='custom-file'>
-        <input type='file' id='excel' class='custom-file-input' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'>
-        <label class='custom-file-label' for='excel'>No file selected.</label>
+      <div id='sectionImport'>
+        <h4>Import</h4>
+        <p class='mb-1'>Import an Excel worksheet of MLS listings:</p>
+        <div class='custom-file mb-2'>
+          <input id='excel' class='custom-file-input' type='file' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'>
+          <label class='custom-file-label' for='excel'>No file selected.</label>
+        </div>
+        <p class='mt-2 mb-2 text-center'><b>OR</b></p>
+        <p class='mb-1'>Import a saved map:</p>
+        <div class='custom-file'>
+          <input id='fileMap' class='custom-file-input' type='file' accept='application/json'>
+          <label class='custom-file-label' for='fileMap'>No file selected.</label>
+        </div>
       </div>
 
-      <!-- Options section. -->
-      <div id='sectionOptions'>
-        <h4 class='mt-3'>Options</h4>
-        <div id='excelMessageStart' class='alert alert-primary' role='alert'>
+
+      <!-- Filter section. -->
+      <div id='sectionOptions' class='hidden'>
+        <h4>Filter</h4>
+        <div id='excelImportLoading' class='text-center hidden'>
+          <div class='spinner-border text-primary' role='status'></div>
+        </div>
+
+
+        <!-- <div id='excelMessageStart' class='alert alert-primary' role='alert'>
           No data imported.
-        </div>
-        <div id='excelMessageError' class='alert alert-danger hidden' role='alert'>
+        </div> -->
+        <!-- <div id='excelMessageError' class='alert alert-danger hidden' role='alert'>
           <b>Error:</b> there is a problem.
-        </div>
-  
-        <!-- Import success section. -->
-        <div id='excelImportLoading' class='text-center mt-4 mb-4 hidden'>
-          <div class='spinner-border' role='status'></div>
-        </div>
-  
+        </div> -->
+
         <div id='excelImportSuccess' class='hidden'>
           <div class='alert alert-success' role='alert'>
             Imported <b id='excelRowCount'>0</b> listings from <b id='excelFileName'>filename</b>.
           </div>
-          <div id='filterByListingStatus'>
-            <p>Select MLS listings by listing status.</p>
+          <div id='filterByListingStatus' class='mb-2'>
+            <p class='mb-2'>Select the listing statuses to include:</p>
           </div>
-
-          <button id='buttonNext' class='btn btn-primary mt-2'>Next <i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+          <p class='mb-2'><b>Note:</b> Each listing will cost a geocoding API request.</p>
+          <button id='buttonNext' class='btn btn-primary mt-2'>Next&ensp;<i class='fa fa-chevron-right'></i></button>
         </div>
       </div>
 
       <!-- Progress section. -->
       <div id='sectionProgress' class='hidden'>
-        <p>Geocoding MLS listings...</p>
+        <h4>Geocode</h4>
+        <p class='mb-2'>Locating MLS listings...</p>
         <div class='progress'>
-          <div id='progressBar' class='progress-bar progress-bar-striped' role='progressbar' style='width:0%'>0%</div>
+          <div id='progressBar ' class='progress-bar progress-bar-striped' role='progressbar' style='width:0%'>0%</div>
         </div>
       </div>
 
       <!-- Summary section. -->
       <div id='sectionRoute' class='hidden'>
-        <h4 class='mt-3'>Route</h4>
+        <h4>Route</h4>
         <div id='routeMessageStart' class='alert alert-primary' role='alert'>
           No route created.
         </div>
 
-        <div id='resultContainer' class='hidden'>
-          <h5>Table</h5>
-          <table id='resultTable' class='table table-bordered text-center'>
-            <thead class='thead-dark'>
-              <th scope='col'></th>
-              <th scope='col'>MLS ID</th>
-              <th scope='col'>Notes</th>
-            </thead>
-            <tbody id='resultTableBody'></tbody>
-          </table>
-  
+        <div id='resultContainer'>
           <h5>String</h5>
-          <p id='resultString'></p>
+          <p id='resultString'>No route created.</p>
 
-          <button id='buttonBack' class='btn btn-primary mt-2'><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</button>
-          <button id='buttonCopy' class='btn btn-success mt-2'><i class="fa fa-clipboard" aria-hidden="true"></i> Copy String</button>
-          <button id='buttonPdf' class='btn btn-success mt-2'><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Save PDF</button>
+          <h5>Table</h5>
+          <table id='resultTable' class='table table-borderless text-center'>
+            <thead id='resultTableHead'>
+              <tr>
+                <th scope='col'></th>
+                <th scope='col'>MLS ID</th>
+                <th scope='col'>Status</th>
+                <th scope='col'></th>
+              </tr>
+            </thead>
+            <tbody id='resultTableBody'>
+              <!-- <tr>
+                <td scope='col'>A</td>
+                <td scope='col'>A1000000</td>
+                <td scope='col'>Expired</td>
+                <td scope='col'>
+                  <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </td>
+              </tr> -->
+            </tbody>
+          </table>
+
+          <button id='buttonBack' class='btn btn-secondary'><i class="fa fa-chevron-left"></i>&ensp;Back</button>
+          <button id='buttonCopy' class='btn btn-primary'><i class="fa fa-clipboard"></i>&ensp;Copy String</button>
+          <button id='buttonPdf' class='btn btn-primary'><i class="fa fa-file-pdf-o"></i>&ensp;Save PDF</button>
         </div>
       </div>
     </div>
  
     <!-- Right panel. -->
-    <div class='col-sm-6 col-md-8'>
-      <div id='map'></div>
+    <div class='col-md-8'>
+      <div id='map' class='mb-3'></div>
+
+      <div id='sectionInfo' class='hidden'>
+        <h4>Listing Information</h4>
+      </div>
     </div>
   </div>
 
   <!-- Footer. -->
-  <div class='row'>
-    <div class='col text-center mt-2'>
-      <hr />
+  <div class='row text-center mt-3'>
+    <div class='col'>
+      <!-- <hr /> -->
       <a href='https://sef.mlsmatrix.com' target='_blank'>MLS Matrix</a>&emsp;|&emsp;
-      <a href='https://console.cloud.google.com/google/maps-apis/overview' target='_blank'>Google Maps API Usage</a>
-      <hr />
-      <p>Copyright &copy; 2019 <a href='http://brycestpierre.com' target='_blank'>Bryce St. Pierre</a>.
+      <a href='https://console.cloud.google.com/google/maps-apis/overview' target='_blank'>Google Maps Platform Usage</a>&emsp;|&emsp;
+      <a href='https://mapsplatformtransition.withgoogle.com/calculator' target='_blank'>Google Maps Platform Calculator</a>
+      <!-- <hr /> -->
+      <p class='mt-4'>Copyright &copy; 2019 <a href='http://brycestpierre.com' target='_blank'>Bryce St. Pierre</a>.
         <br>Made with <i class='fa fa-heart text-danger'></i> in Ottawa.</p>
     </div>
   </div>

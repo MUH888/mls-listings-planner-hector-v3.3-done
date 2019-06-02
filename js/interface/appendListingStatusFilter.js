@@ -10,7 +10,7 @@ function appendListingStatusFilter () {
       .attr('value', s);
     var $i = $('<i />')
       .attr('class', 'fa fa-map-marker fa-lg mr-1')
-      .attr('style', 'color:' +  data.listingStatusStyles[s].colour);
+      .attr('style', 'color:' +  colours[s]); //data.listingStatusStyles[s].colour);
     var $label = $('<label />')
       .attr('class', 'form-check-label')
       .html(s + ' <span class="badge badge-primary">' + data.listingsByStatus[s].length + '</span>');

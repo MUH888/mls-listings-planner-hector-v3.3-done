@@ -1,5 +1,5 @@
 $(function () {
-  //createMap('map');
+  createMap('map');
 
   $('#greeting').text(getGreeting());
 
@@ -16,15 +16,18 @@ $(function () {
 
     if (e.target.files.length < 1) {
       $('#excelMessageError').removeClass('hidden');
-      $('#excelMessageError').html('<b>Error:</b> An Excel workbook is required.');
+      $('#excelMessageError').html('<b>Error:</b> An Excel worksheet is required.');
       return;
     }
 
     if (e.target.files[0].type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
       $('#excelMessageError').removeClass('hidden');
-      $('#excelMessageError').html('<b>Error:</b> Imported file must be an Excel workbook (.xlsx).');
+      $('#excelMessageError').html('<b>Error:</b> Imported file must be an Excel worksheet (.xlsx).');
       return;
     }
+
+    $('#sectionImport').addClass('hidden');
+    $('#sectionOptions').removeClass('hidden');
 
     $('#excelMessageError').addClass('hidden'); // Hide start and error message and show loading spinner.
     $('#excelImportLoading').removeClass('hidden'); 
