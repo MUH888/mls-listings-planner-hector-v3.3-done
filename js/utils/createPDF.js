@@ -12,17 +12,17 @@ function createPDF () {
 
   pdf.setFontSize(14);
   pdf.text(10, 10, 'Date: ' + date.toLocaleDateString());
-  pdf.text(10, 24, 'String');
+  //pdf.text(10, 24, 'String');
 
-  pdf.setFontSize(12);
-  pdf.text(10, 36, $('#resultString').text());
+  // pdf.setFontSize(12);
+  // pdf.text(10, 36, $('#resultString').text());
 
   pdf.setFontSize(14);
   pdf.text(10, 50, 'Table');
 
   pdf.setFontSize(12);
   pdf.autoTable({
-    html: '#resultTable',
+    html: '#routeTable',
     theme: 'plain',
     margin: { top: 70 },
     styles: {

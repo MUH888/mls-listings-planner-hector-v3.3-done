@@ -1,7 +1,7 @@
 function processData (excelData) {
   var mlsData = {
     listingStatus: [],
-    listingStatusStyles: {},
+    //listingStatusStyles: {},
     listingsByStatus: {},
     listings: []
   };
@@ -12,10 +12,10 @@ function processData (excelData) {
   );
 
   mlsData.listingStatus.forEach(function (s, i) {
-    mlsData.listingStatusStyles[s] = {
-      colour: colours[i],
-      icon: icons[i]
-    };
+    // mlsData.listingStatusStyles[s] = {
+    //   colour: colours[i],
+    //   icon: icons[i]
+    // };
 
     mlsData.listingsByStatus[s] = excelData.filter(function (l) {
       return l['Listing Status'] === s;

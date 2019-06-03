@@ -9,10 +9,12 @@ function populateMap (listings) {
     });
 
     m.addListener('click', function () {
+      //infoWindow.close();
       stopArray.push({
+        // letter: letters[stopArray.length],
         mlsId: l.mlsId,
-        latLng: l.latLng,
-        letter: letters[stopArray.length]
+        listingStatus: l.listingStatus,
+        latLng: l.latLng
       });
       updateDirections();
     });
@@ -21,17 +23,21 @@ function populateMap (listings) {
     //   infoWindow.setPosition(l.latLng);
     //   infoWindow.setContent(l.mlsId);
     //   infoWindow.open(map);
-    // })
+    // });
+
+    // m.addListener('mouseout', function () {
+    //   infoWindow.close();
+    // });
 
     markers.push(m);
 
     bounds.extend(l.latLng);
   });
 
-  console.log({
-    listingCount: listings.length,
-    markerCount: markers.length
-  });
+  // console.log({
+  //   listingCount: listings.length,
+  //   markerCount: markers.length
+  // });
 
   map.fitBounds(bounds);
 }

@@ -6,9 +6,9 @@ function createMap (elementId) {
     rotateControl: false,
     zoom: 11
   });
-  infoWindow = new google.maps.InfoWindow({
-    maxWidth: 250
-  });
+  // infoWindow = new google.maps.InfoWindow({
+  //   maxWidth: 250
+  // });
   bounds = new google.maps.LatLngBounds();
   geocoder = new google.maps.Geocoder();
   markers = [];
@@ -23,24 +23,33 @@ function createMap (elementId) {
     preserveViewport: true
   });
 
-  var customControlDiv = document.createElement('div');
-  var customControl = new CustomControls(customControlDiv);
+  var resetControlDiv = document.createElement('div');
+  var resetControl = new ResetControl(resetControlDiv);
 
-  customControlDiv.index = 1;
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(customControlDiv);
+  var undoControlDiv = document.createElement('div');
+  var undoControl = new UndoControl(undoControlDiv);
+
+  resetControlDiv.index = 1;
+  undoControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(resetControlDiv);
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(undoControlDiv);
 
   directionsDisplay.addListener('directions_changed', function () {
-    console.log('Directions changed.');
-    
-    $('#routeMessageStart').addClass('hidden');
-    $('#resultContainer').removeClass('hidden');
+    //console.log('Directions changed.');
+    if (stopArray.length === 0) {
+      $('#messageRoute').removeClass('hidden');
+      $('#contentRoute').addClass('hidden');
+    } else {
+      $('#messageRoute').addClass('hidden');
+      $('#contentRoute').removeClass('hidden');
+    }
 
-    appendRouteTable();
-    appendRouteString();
+    setRouteTable();
+    setRouteString();
   });
 }
 
-function CustomControls (controlDiv) {
+function UndoControl (undoDiv) {
   // Set CSS for the control border.
   var undoButton = document.createElement('div');
   undoButton.style.backgroundColor = '#fff';
@@ -52,8 +61,8 @@ function CustomControls (controlDiv) {
   undoButton.style.marginLeft = '10px';
   undoButton.style.marginBottom = '10px';
   undoButton.style.textAlign = 'center';
-  undoButton.title = 'Click to undo last stop.';
-  controlDiv.appendChild(undoButton);
+  undoButton.title = 'Click to undo stop.';
+  undoDiv.appendChild(undoButton);
 
   // Set CSS for the control interior.
   var undoText = document.createElement('div');
@@ -63,9 +72,21 @@ function CustomControls (controlDiv) {
   undoText.style.lineHeight = '38px';
   undoText.style.paddingLeft = '5px';
   undoText.style.paddingRight = '5px';
-  undoText.innerHTML = 'Undo Last Stop';
+  undoText.innerHTML = 'Undo Stop';
   undoButton.appendChild(undoText);
 
+  undoButton.addEventListener('click', function () {
+    stopArray.pop();
+    if (stopArray.length === 1) // Pop again if only one stop remains.
+      stopArray.pop();
+
+    setRouteString();
+    setRouteTable();
+    updateDirections();
+  });
+}
+
+function ResetControl (resetDiv) {
   // Set CSS for the control border.
   var resetButton = document.createElement('div');
   resetButton.style.backgroundColor = '#fff';
@@ -77,8 +98,8 @@ function CustomControls (controlDiv) {
   resetButton.style.marginLeft = '10px';
   resetButton.style.marginBottom = '22px';
   resetButton.style.textAlign = 'center';
-  resetButton.title = 'Click to reset directions.';
-  controlDiv.appendChild(resetButton);
+  resetButton.title = 'Click to reset stops.';
+  resetDiv.appendChild(resetButton);
 
   // Set CSS for the control interior.
   var resetText = document.createElement('div');
@@ -88,18 +109,14 @@ function CustomControls (controlDiv) {
   resetText.style.lineHeight = '38px';
   resetText.style.paddingLeft = '5px';
   resetText.style.paddingRight = '5px';
-  resetText.innerHTML = 'Reset Directions';
+  resetText.innerHTML = 'Reset Stops';
   resetButton.appendChild(resetText);
-
-  undoButton.addEventListener('click', function () {
-    stopArray.pop();
-    if (stopArray.length === 1) // Pop again if only one stop remains.
-      stopArray.pop();
-    updateDirections();
-  });
 
   resetButton.addEventListener('click', function () {
     stopArray.clear();
+
+    setRouteString();
+    setRouteTable();
     updateDirections();
   });
 }

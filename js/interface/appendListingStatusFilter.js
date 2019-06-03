@@ -18,11 +18,11 @@ function appendListingStatusFilter () {
     $div.append($input);
     $div.append($i);
     $div.append($label);  
-    $('#filterByListingStatus').append($div);
+    $('#filterCheckboxes').append($div);
   });
 
   $('.form-check-input').change(function (e) {
     options.listingStatusFilter[e.target.value] = !options.listingStatusFilter[e.target.value]
-    console.log(options.listingStatusFilter);
+    //console.log(options.listingStatusFilter);
   });
 }
