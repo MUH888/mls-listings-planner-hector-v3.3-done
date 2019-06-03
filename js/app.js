@@ -22,7 +22,6 @@ $(function () {
 
     $('#containerImport').addClass('hidden');
     $('#containerFilter').removeClass('hidden');
-
     $('#messageImport').addClass('hidden'); // Hide start and error message and show loading spinner.
     $('#spinner').removeClass('hidden');
     
@@ -41,7 +40,6 @@ $(function () {
       //console.log(data);
 
       $('#spinner').addClass('hidden');
-
       $('#excelFileName').text(options.filename);
       $('#excelRowCount').text(excelData.length);
       $('#contentFilter').removeClass('hidden');

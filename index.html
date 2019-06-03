@@ -113,6 +113,41 @@
         <button id='buttonSaveMap' class='btn btn-success'><i class="fa fa-map"></i>&ensp;Save Map</button>
         
         <h4 class='mt-4'>Listing Information</h4>
+        <table class='table table-borderless tableListingInformation'>
+          <tbody>
+            <tr>
+              <th>MLS ID:</th>
+              <td id='tMlsId'></td>
+              <th>Status Change Date:</th>
+              <td id='tStatusChangeDate'></td>
+            </tr>
+            <tr>
+              <th>Full Name:</th>
+              <td id='tFullName'></td>
+              <th>Listing Status:</th>
+              <td id='tListingStatus'></td>
+            </tr>
+            <tr>
+              <th>Address:</th>
+              <td id='tAddress'></td>
+              <th>Tax Address:</th>
+              <td id='tTaxAddress'></td>
+            </tr>
+            <tr>
+              <th>Phone:</th>
+              <td id='tPhone'></td>
+              <th>List Agent:</th>
+              <td id='tListAgent'></td>
+            </tr>
+            <tr>
+              <th>Email:</th>
+              <td id='tEmail'></td>
+              <th>List Price:</th>
+              <td id='tListPrice'></td>
+            </tr>
+          </tbody>
+        </table>
+        <p><b>Notes:</b> <span id='tNotes'></span></p>
       </div>
     </div>
   </div>
@@ -154,6 +189,7 @@
 
 <script src='js/interface/appendListingStatusFilter.js'></script>
 <script src='js/interface/setGreeting.js'></script>
+<script src='js/interface/setListingInfo.js'></script>
 <script src='js/interface/setProgress.js'></script>
 <script src='js/interface/setRouteString.js'></script>
 <script src='js/interface/setRouteTable.js'></script>

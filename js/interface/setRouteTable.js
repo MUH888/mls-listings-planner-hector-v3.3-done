@@ -10,18 +10,17 @@ function setRouteTable () {
     var $tdLetter = $('<td />')
       .attr('scope', 'col')
       .text(letters[i]);
-
     var $tdMlsId = $('<td />')
       .attr('scope', 'col')
-      .text(s.mlsId);
-
+      .text(s.mlsId)
+      .mouseover(function () {
+        setListingInfo(stopArray.getAt(i).listing);
+      });
     var $tdStatus = $('<td />')
       .attr('scope', 'col')
       .text(s.listingStatus);
-
     var $tdClose = $('<td />')
       .attr('scope', 'col');
-
     var $tdCloseButton = $('<button />')
       .attr('type', 'button')
       .attr('class', 'close')

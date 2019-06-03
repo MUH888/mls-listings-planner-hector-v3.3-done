@@ -6,16 +6,10 @@ function createMap (elementId) {
     rotateControl: false,
     zoom: 11
   });
-  // infoWindow = new google.maps.InfoWindow({
-  //   maxWidth: 250
-  // });
+  
   bounds = new google.maps.LatLngBounds();
   geocoder = new google.maps.Geocoder();
   markers = [];
-
-  // map.addListener('click', function () {
-  //   infoWindow.close();
-  // });
 
   stopArray = new google.maps.MVCArray();
   directionsService = new google.maps.DirectionsService;
