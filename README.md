@@ -1,7 +1,6 @@
 # MLS Listing Planner
 A single-page web application that uses the Google Maps JavaScript API, Geocoding API, and Directions API to manage MLS listings from an Excel file and plan visits.
 
-## Screenshot
 ![MLS Listing Planner Screenshot](./img/screenshot.png)
 
 ## Libraries
