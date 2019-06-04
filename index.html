@@ -29,6 +29,7 @@
 
     <!-- Left panel. -->
     <div class='col-md-4'>
+      <!-- <button id='buttonTestPdf' class='btn btn-primary'>Test PDF</button> -->
 
       <!-- Import container. -->
       <div id='containerImport'>
@@ -109,8 +110,11 @@
       <!-- Actions container. -->
       <div id='containerActions' class='hidden'>
         <button id='buttonCopyString' class='btn btn-primary'><i class="fa fa-clipboard"></i>&ensp;Copy String</button>
+        <button id='buttonCopyDirections' class='btn btn-primary'><i class="fa fa-clipboard"></i>&ensp;Copy Directions</button>
         <button id='buttonSavePdf' class='btn btn-danger'><i class="fa fa-file-pdf-o"></i>&ensp;Save PDF</button>
-        <button id='buttonSaveMap' class='btn btn-success'><i class="fa fa-map"></i>&ensp;Save Map</button>
+        <a id='buttonSaveMap' class='btn btn-success' href='#'>
+          <i class="fa fa-map"></i>&ensp;Save Map
+        </a>
         
         <h4 class='mt-4'>Listing Information</h4>
         <table class='table table-borderless tableListingInformation'>
@@ -192,10 +196,12 @@
 <script src='js/data/cacheData.js'></script>
 <script src='js/data/processData.js'></script>
 <script src='js/data/readData.js'></script>
+<script src='js/data/readMapFile.js'></script>
 
 <script src='js/interface/appendListingStatusFilter.js'></script>
 <script src='js/interface/setGreeting.js'></script>
 <script src='js/interface/setListingInfo.js'></script>
+<script src='js/interface/setMapFile.js'></script>
 <script src='js/interface/setProgress.js'></script>
 <script src='js/interface/setRouteString.js'></script>
 <script src='js/interface/setRouteTable.js'></script>

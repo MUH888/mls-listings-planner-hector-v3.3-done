@@ -48,6 +48,38 @@ $(function () {
     });
   });
 
+  $('#fileMap').change(function (e) {
+
+    if (e.target.files[0].type !== 'application/json') {
+      $('#messageImport').removeClass('hidden');
+      $('#messageImport').html('<b>Error:</b> Imported map must be a JSON file (.json).');
+      return;
+    }
+
+    readMapFile(e.target.files[0], function (err, json) {
+
+      if (err) {
+        $('#messageImport').removeClass('hidden');
+        $('#messageImport').html('<b>Error:</b> ' + err);
+        return;
+      }
+
+      data = json.data;
+      options = json.options;
+      stopArray = new google.maps.MVCArray(json.stopArray);
+
+      populateMap(data.listings.filter(function (l) {
+        return options.listingStatusFilter[l.listingStatus] && l.latLng;
+      }));
+      updateDirections();
+
+      $('#containerImport').addClass('hidden');
+      $('#containerRoute').removeClass('hidden');
+      $('#containerActions').removeClass('hidden');
+    });
+  });
+
+
   $('#buttonNext').click(function () {
     $('#containerFilter').addClass('hidden');
     $('#containerGeocode').removeClass('hidden')
@@ -76,15 +108,17 @@ $(function () {
     });
   });
 
-  var clipboard = new ClipboardJS('#buttonCopyString');
+  var clipboard1 = new ClipboardJS('#buttonCopyString');
+  var clipboard2 = new ClipboardJS('#buttonCopyDirections');
 
   $('#buttonSavePdf').click(function () {
     createPDF();
   });
 
-  $('#buttonSaveMap').click(function () {
-    console.log('TODO: Implement save map.');
-  });
+  // $('#buttonSaveMap').click(function () {
+  //   console.log('TODO: Implement save map.');
+  // });
+
 }); 
 
 // $('#buttonBack').click(function () {

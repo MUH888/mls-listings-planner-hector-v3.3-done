@@ -12,6 +12,23 @@ function setRouteString () {
       string += s.mlsId + ', ';
   });
 
+  var directions = '';
+  stopArray.forEach(function (s, i) {
+    if (i === stopArray.length - 1) {
+      directions += letters[i] 
+        + ': ' 
+        + 'https://www.google.com/maps/dir/?api=1&destination=' 
+        + encodeURI(s.listing.taxAddress);
+    } else {
+      directions += letters[i] 
+        + ': ' 
+        + 'https://www.google.com/maps/dir/?api=1&destination=' 
+        + encodeURI(s.listing.taxAddress)
+        + '\n';
+    }
+  });
+
   $('#buttonCopyString').attr('data-clipboard-text', string);
+  $('#buttonCopyDirections').attr('data-clipboard-text', directions);
   $('#routeString').text(string);
 }

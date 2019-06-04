@@ -16,6 +16,7 @@ function populateMap (listings) {
         latLng: l.latLng
       });
       updateDirections();
+      setMapFile();
     });
 
     m.addListener('mouseover', function () {
