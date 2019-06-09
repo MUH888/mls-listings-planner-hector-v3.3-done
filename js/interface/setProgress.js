@@ -1,5 +1,4 @@
 function setProgress (increase) {
-  //var progress = Number($('#progressBar').css('width').split('%')[0]);
   progress += increase;
   
   if (progress > 100)

@@ -1,40 +1,35 @@
 $(function () {
   createMap('map');
 
-  $('#greeting').text(getGreeting());
+  setGreeting();
 
-  if (!verifyStorage())
-    $('#webStorageError').removeClass('hidden');
-  else {
+  if (!verifyStorage()) {
+    $('#messageWebStorage').removeClass('hidden');
+  } else {
     cache = getStorageValue('cache');
     if (!cache)
       cache = {};
   }
-  console.log(cache);
+  //console.log(cache);
     
-  $('#excel').change(function (e) {
-
-    if (e.target.files.length < 1) {
-      $('#excelMessageError').removeClass('hidden');
-      $('#excelMessageError').html('<b>Error:</b> An Excel workbook is required.');
-      return;
-    }
+  $('#fileExcel').change(function (e) {
 
     if (e.target.files[0].type !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-      $('#excelMessageError').removeClass('hidden');
-      $('#excelMessageError').html('<b>Error:</b> Imported file must be an Excel workbook (.xlsx).');
+      $('#messageImport').removeClass('hidden');
+      $('#messageImport').html('<b>Error:</b> Imported file must be an Excel worksheet (.xlsx).');
       return;
     }
 
-    $('#excelMessageError').addClass('hidden'); // Hide start and error message and show loading spinner.
-    $('#excelImportLoading').removeClass('hidden'); 
-    $('#excelMessageStart').addClass('hidden');
+    $('#containerImport').addClass('hidden');
+    $('#containerFilter').removeClass('hidden');
+    $('#messageImport').addClass('hidden'); // Hide start and error message and show loading spinner.
+    $('#spinner').removeClass('hidden');
     
     readData(e.target.files[0], function (err, excelData) {
     
       if (err) {
-        $('#excelMessageError').removeClass('hidden');
-        $('#excelMessageError').html('<b>Error:</b> ' + err);
+        $('#messageImport').removeClass('hidden');
+        $('#messageImport').html('<b>Error:</b> ' + err);
         return;
       }
 
@@ -42,23 +37,52 @@ $(function () {
       $('label.custom-file-label').text('File: ' + options.filename);
 
       data = processData(excelData);
-      console.log(data);
+      //console.log(data);
 
-      $('#excelImportLoading').addClass('hidden');
-
+      $('#spinner').addClass('hidden');
       $('#excelFileName').text(options.filename);
       $('#excelRowCount').text(excelData.length);
-      
-      $('#excelImportSuccess').removeClass('hidden');
+      $('#contentFilter').removeClass('hidden');
 
       appendListingStatusFilter();
     });
   });
 
-  $('#buttonNext').click(function () {
+  $('#fileMap').change(function (e) {
 
-    $('#sectionOptions').addClass('hidden');
-    $('#sectionProgress').removeClass('hidden')
+    if (e.target.files[0].type !== 'application/json') {
+      $('#messageImport').removeClass('hidden');
+      $('#messageImport').html('<b>Error:</b> Imported map must be a JSON file (.json).');
+      return;
+    }
+
+    readMapFile(e.target.files[0], function (err, json) {
+
+      if (err) {
+        $('#messageImport').removeClass('hidden');
+        $('#messageImport').html('<b>Error:</b> ' + err);
+        return;
+      }
+
+      data = json.data;
+      options = json.options;
+      stopArray = new google.maps.MVCArray(json.stopArray);
+
+      populateMap(data.listings.filter(function (l) {
+        return options.listingStatusFilter[l.listingStatus] && l.latLng;
+      }));
+      updateDirections();
+
+      $('#containerImport').addClass('hidden');
+      $('#containerRoute').removeClass('hidden');
+      $('#containerActions').removeClass('hidden');
+    });
+  });
+
+
+  $('#buttonNext').click(function () {
+    $('#containerFilter').addClass('hidden');
+    $('#containerGeocode').removeClass('hidden')
 
     var completeListings = data.listings.filter(function (l) {
       return options.listingStatusFilter[l.listingStatus] && l.latLng;
@@ -68,8 +92,6 @@ $(function () {
     });
 
     geocodeMap(incompleteListings, function (geocodedListings) {
-      //console.log(geocodedListings);
-
       geocodedCache = {};
       geocodedListings.forEach(function (l) {
         geocodedCache[l.mlsId] = l.latLng;
@@ -77,24 +99,29 @@ $(function () {
 
       cacheData(geocodedCache);
 
-      $('#sectionProgress').addClass('hidden');
-      $('#sectionRoute').removeClass('hidden')
+      $('#containerGeocode').addClass('hidden');
+      $('#containerRoute').removeClass('hidden');
+      $('#containerActions').removeClass('hidden');
 
       var listings = _.extend(completeListings, geocodedListings);
-      //console.log(listings);
       populateMap(listings);
     });
   });
 
-  $('#buttonBack').click(function () {
-    $('#sectionRoute').addClass('hidden');
-    $('#sectionOptions').removeClass('hidden');
-  });
+  var clipboard1 = new ClipboardJS('#buttonCopyString');
+  var clipboard2 = new ClipboardJS('#buttonCopyDirections');
 
-  $('#buttonPdf').click(function () {
+  $('#buttonSavePdf').click(function () {
     createPDF();
   });
 
-  var clipboard = new ClipboardJS('#buttonCopy');
-  
-});
+  // $('#buttonSaveMap').click(function () {
+  //   console.log('TODO: Implement save map.');
+  // });
+
+}); 
+
+// $('#buttonBack').click(function () {
+  //   $('#containerRoute').addClass('hidden');
+  //   $('#containerFilter').removeClass('hidden');
+  // });

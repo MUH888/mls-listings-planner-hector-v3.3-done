@@ -10,7 +10,7 @@ function appendListingStatusFilter () {
       .attr('value', s);
     var $i = $('<i />')
       .attr('class', 'fa fa-map-marker fa-lg mr-1')
-      .attr('style', 'color:' +  data.listingStatusStyles[s].colour);
+      .attr('style', 'color:' +  colours[s]);
     var $label = $('<label />')
       .attr('class', 'form-check-label')
       .html(s + ' <span class="badge badge-primary">' + data.listingsByStatus[s].length + '</span>');
@@ -18,11 +18,11 @@ function appendListingStatusFilter () {
     $div.append($input);
     $div.append($i);
     $div.append($label);  
-    $('#filterByListingStatus').append($div);
+    $('#filterCheckboxes').append($div);
   });
 
   $('.form-check-input').change(function (e) {
     options.listingStatusFilter[e.target.value] = !options.listingStatusFilter[e.target.value]
-    console.log(options.listingStatusFilter);
+    //console.log(options.listingStatusFilter);
   });
 }

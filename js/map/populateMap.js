@@ -5,33 +5,26 @@ function populateMap (listings) {
       map: map,
       title: l.taxAddress,
       position: l.latLng,
-      icon: data.listingStatusStyles[l.listingStatus].icon
+      icon: icons[l.listingStatus]
     });
 
     m.addListener('click', function () {
       stopArray.push({
         mlsId: l.mlsId,
-        latLng: l.latLng,
-        letter: letters[stopArray.length]
+        listingStatus: l.listingStatus,
+        listing: l,
+        latLng: l.latLng
       });
       updateDirections();
+      setMapFile();
     });
 
-    // m.addListener('mouseover', function () {
-    //   infoWindow.setPosition(l.latLng);
-    //   infoWindow.setContent(l.mlsId);
-    //   infoWindow.open(map);
-    // })
+    m.addListener('mouseover', function () {
+      setListingInfo(l);
+    });
 
     markers.push(m);
-
     bounds.extend(l.latLng);
   });
-
-  console.log({
-    listingCount: listings.length,
-    markerCount: markers.length
-  });
-
   map.fitBounds(bounds);
 }
