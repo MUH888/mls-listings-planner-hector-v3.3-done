@@ -8,7 +8,7 @@ function createPDF () {
     author: 'Hector Chomat',
     creator: 'Hector Chomat',
     subject: 'MLS Listing Planner Report - ' + date.toDateString(),
-    keywords: 'mls, real estate, multiple listing service, listings'
+    keywords: 'real estate, real estate listings, mls, multiple listing service, google maps'
   });
 
   // Report title.
@@ -22,7 +22,7 @@ function createPDF () {
   y += 4;
 
   var stopsHead = [
-    ['', 'MLS ID', 'Status', 'Tax Address', 'Subject Address', 'Notes'],
+    ['', 'MLS ID', 'Listing Status', 'Notes'],
   ];
   var stopsBody = [];
 
@@ -31,20 +31,17 @@ function createPDF () {
       letters[i],
       s.mlsId,
       s.listingStatus,
-      s.listing.taxAddress,
-      s.listing.address,
-      '_______________________'
+      '__________________________________________________'
     ]);
   });
 
-  pdf.setFontSize(12);
   pdf.autoTable({
     startY: y,
     head: stopsHead,
     body: stopsBody, 
     theme: 'plain',
     styles: {
-      fontSize: 8,
+      fontSize: 9,
       halign: 'center',
       cellPadding: 0.5
     }
@@ -52,79 +49,70 @@ function createPDF () {
 
   // Directions table.
   y = pdf.previousAutoTable.finalY + 8;
+  pdf.setFontSize(12);
   pdf.text(10, y, 'Directions');
+  y += 6;
+
+  pdf.setFontSize(10);
+  pdf.setFontStyle('bold');
+  pdf.text(30, y, 'Tax Address');
+  pdf.text(100, y, 'Subject Address');
   y += 4;
 
-  var directionsHead = [
-    ['', 'URL'],
-  ];
-  var directionsBody = [];
-
+  pdf.setFontSize(9);
+  pdf.setFontStyle('normal');
   stopArray.forEach(function (s, i) {
-    directionsBody.push([
-      letters[i],
-      encodeURI('https://google.com/maps/dir/?api=1&destination=' + s.listing.taxAddress)
-      // s.listing.taxAddress,
-      // s.listing.address
-    ]);
+    pdf.text(10, y, letters[i]);
+
+    pdf.setTextColor('#00F');
+    pdf.textWithLink(s.listing.taxAddress, 15, y, {
+      url: encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + s.listing.taxAddress)
+    });
+
+    pdf.setTextColor('#000');
+    pdf.text(15 + (pdf.getTextDimensions(s.listing.taxAddress).w) + 5, y, s.listing.address);
+    y += 4;
   });
 
-  pdf.setFontSize(6);
-  pdf.autoTable({
-    startY: y,
-    head: directionsHead,
-    body: directionsBody, 
-    theme: 'plain',
-    headStyles: {
-      halign: 'center',
-      cellPadding: 0.5
-    },
-    bodyStyles: {
-      fontSize: 8,
-      halign: 'left',
-      cellPadding: 0.75,
-      cellWidth: 'wrap'
-    }
-  });
-
-  y = pdf.previousAutoTable.finalY + 8;
+  y += 4;
   pdf.setFontSize(12);
   pdf.text(10, y, 'Listing Information');
-  y += 8;
+  y += 4;
 
-  var listingsHeader1 = [
+  var listingsHeader = [
     ['', 'Name', 'Listing Status', 'Price', 'Last Call Result']
   ];
-  var listingsHeader2 = [
+  var listingsBody = [];
+
+  var notesHeader = [
     ['', 'Notes']
   ];
-  var listingsBody1 = [];
-  var listingsBody2 = [];
+  var notesBody = [];
 
   stopArray.forEach(function (s, i) {
     var l = s.listing;
-    listingsBody1.push([
+    listingsBody.push([
       letters[i],
       l.fullName,
       l.listingStatus,
       l.price,
       l.lastCallResult
     ]);
-    listingsBody2.push([
+    notesBody.push([
       letters[i],
       l.notes
     ]);
   });
 
-  // Listing information table.
-  pdf.setFontSize(8);
+  // Listings information table.
   pdf.autoTable({
     startY: y,
-    head: listingsHeader1,
-    body: listingsBody1, 
+    head: listingsHeader,
+    body: listingsBody, 
     theme: 'plain',
     styles: {
-      halign: 'center',
+      fontSize: 10,
+      halign: 'left',
       cellPadding: 0.5
     }
   });
@@ -133,8 +121,8 @@ function createPDF () {
   y = pdf.previousAutoTable.finalY + 4;
   pdf.autoTable({
     startY: y,
-    head: listingsHeader2,
-    body: listingsBody2, 
+    head: notesHeader,
+    body: notesBody, 
     theme: 'plain',
     headStyles: {
       halign: 'center',
@@ -143,7 +131,7 @@ function createPDF () {
     bodyStyles: {
       fontSize: 8,
       halign: 'left',
-      cellPadding: 0.5
+      cellPadding: 0.25
     }
   });
 
