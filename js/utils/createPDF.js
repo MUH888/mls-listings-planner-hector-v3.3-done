@@ -1,7 +1,7 @@
 function createPDF () {
-  var pdf = new jsPDF();
+  var pdf = new jsPDF('p', 'mm', 'letter');
   var date = new Date();
-  var y = 10;
+  var y = 20;
 
   pdf.setProperties({
     title: 'Report-' + date.toDateString().split(' ').join('-'),
@@ -48,33 +48,44 @@ function createPDF () {
   });
 
   // Directions table.
-  y = pdf.previousAutoTable.finalY + 8;
+  y = pdf.previousAutoTable.finalY + 8 + 15;
   pdf.setFontSize(12);
   pdf.text(10, y, 'Directions');
   y += 6;
 
+  pdf.setFontSize(9);
+  var tab = 0;
+  stopArray.forEach(function (s) {
+    var width = pdf.getTextDimensions(s.listing.taxAddress).w;
+    if (width > tab)
+      tab = width;
+  });
+
   pdf.setFontSize(10);
   pdf.setFontStyle('bold');
-  pdf.text(30, y, 'Tax Address');
-  pdf.text(100, y, 'Subject Address');
+  pdf.text(25, y, 'Tax Address');
+  pdf.text(25 + tab + 10, y, 'Subject Address');
   y += 4;
 
   pdf.setFontSize(9);
   pdf.setFontStyle('normal');
   stopArray.forEach(function (s, i) {
-    pdf.text(10, y, letters[i]);
+    pdf.text(15, y, letters[i]);
 
     pdf.setTextColor('#00F');
-    pdf.textWithLink(s.listing.taxAddress, 15, y, {
+    pdf.textWithLink(s.listing.taxAddress, 25, y, {
       url: encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + s.listing.taxAddress)
     });
 
     pdf.setTextColor('#000');
-    pdf.text(15 + (pdf.getTextDimensions(s.listing.taxAddress).w) + 5, y, s.listing.address);
+    pdf.text(25 + tab + 10, y, s.listing.address);
     y += 4;
   });
 
-  y += 4;
+  pdf.addPage();
+  y = 20;
+
+  //y += 4;
   pdf.setFontSize(12);
   pdf.text(10, y, 'Listing Information');
   y += 4;
