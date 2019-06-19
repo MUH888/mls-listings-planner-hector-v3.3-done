@@ -23,6 +23,5 @@ function appendListingStatusFilter () {
 
   $('.form-check-input').change(function (e) {
     options.listingStatusFilter[e.target.value] = !options.listingStatusFilter[e.target.value]
-    //console.log(options.listingStatusFilter);
   });
 }

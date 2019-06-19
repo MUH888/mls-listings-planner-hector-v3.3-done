@@ -17,13 +17,11 @@ function setRouteString () {
     if (i === stopArray.length - 1) {
       directions += letters[i] 
         + ': ' 
-        + 'https://www.google.com/maps/dir/?api=1&destination=' 
-        + encodeURI(s.listing.taxAddress);
+        + encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + s.listing.taxAddress);
     } else {
       directions += letters[i] 
         + ': ' 
-        + 'https://www.google.com/maps/dir/?api=1&destination=' 
-        + encodeURI(s.listing.taxAddress)
+        + encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + s.listing.taxAddress)
         + '\n';
     }
   });

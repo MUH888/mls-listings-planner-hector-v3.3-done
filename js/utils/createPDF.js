@@ -1,14 +1,14 @@
 function createPDF () {
-  var pdf = new jsPDF();
+  var pdf = new jsPDF('p', 'mm', 'letter');
   var date = new Date();
-  var y = 10;
+  var y = 20;
 
   pdf.setProperties({
     title: 'Report-' + date.toDateString().split(' ').join('-'),
     author: 'Hector Chomat',
     creator: 'Hector Chomat',
     subject: 'MLS Listing Planner Report - ' + date.toDateString(),
-    keywords: 'mls, real estate, multiple listing service, listings'
+    keywords: 'real estate, real estate listings, mls, multiple listing service, google maps'
   });
 
   // Report title.
@@ -19,7 +19,7 @@ function createPDF () {
   // Stops table.
   pdf.setFontSize(12);
   pdf.text(10, y, 'Stops');
-  y += 6;
+  y += 4;
 
   var stopsHead = [
     ['', 'MLS ID', 'Listing Status', 'Notes'],
@@ -35,97 +35,122 @@ function createPDF () {
     ]);
   });
 
-  pdf.setFontSize(12);
   pdf.autoTable({
     startY: y,
     head: stopsHead,
     body: stopsBody, 
     theme: 'plain',
     styles: {
-      halign: 'center'
+      fontSize: 9,
+      halign: 'center',
+      cellPadding: 0.5
     }
   });
 
-  // Directions links.
-  y = pdf.previousAutoTable.finalY + 8;
+  // Directions table.
+  y = pdf.previousAutoTable.finalY + 8 + 15;
+  pdf.setFontSize(12);
   pdf.text(10, y, 'Directions');
-  y += 8;
+  y += 6;
 
-  pdf.setFontSize(8);
-  stopArray.forEach(function (s, i) {
-    pdf.text(10, y, letters[i] + ': ');
-    pdf.setTextColor('#00F');
-
-    pdf.textWithLink(s.listing.taxAddress, 15, y, {
-      url: 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURI(s.listing.taxAddress)
-    });
-    pdf.setTextColor('#000');
-    y += 6;
+  pdf.setFontSize(9);
+  var tab = 0;
+  stopArray.forEach(function (s) {
+    var width = pdf.getTextDimensions(s.listing.taxAddress).w;
+    if (width > tab)
+      tab = width;
   });
 
-  // Listing information tables.
-  y += 8;
+  pdf.setFontSize(10);
+  pdf.setFontStyle('bold');
+  pdf.text(25, y, 'Tax Address');
+  pdf.text(25 + tab + 10, y, 'Subject Address');
+  y += 4;
+
+  pdf.setFontSize(9);
+  pdf.setFontStyle('normal');
+  stopArray.forEach(function (s, i) {
+    pdf.text(15, y, letters[i]);
+
+    pdf.setTextColor('#00F');
+    pdf.textWithLink(s.listing.taxAddress, 25, y, {
+      url: encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + s.listing.taxAddress)
+    });
+
+    pdf.setTextColor('#000');
+    pdf.text(25 + tab + 10, y, s.listing.address);
+    y += 4;
+  });
+
+  pdf.addPage();
+  y = 20;
+
+  //y += 4;
   pdf.setFontSize(12);
   pdf.text(10, y, 'Listing Information');
-  y += 8;
+  y += 4;
 
-  var listingsHeader1 = [
-    ['', 'MLS ID', 'Name', 'Phone', 'Email', 'Type']
+  var listingsHeader = [
+    ['', 'Name', 'Listing Status', 'Price', 'Last Call Result']
   ];
-  var listingsHeader2 = [
-    ['', 'Status', 'Tax Address', 'Price', 'Agent', 'Last Call Result']
+  var listingsBody = [];
+
+  var notesHeader = [
+    ['', 'Notes']
   ];
-  var listingsBody1 = [];
-  var listingsBody2 = [];
+  var notesBody = [];
 
   stopArray.forEach(function (s, i) {
     var l = s.listing;
-    listingsBody1.push([
+    listingsBody.push([
       letters[i],
-      l.mlsId,
       l.fullName,
-      l.phone,
-      l.email,
-      l.propertyType
-    ]);
-    listingsBody2.push([
-      letters[i],
       l.listingStatus,
-      l.taxAddress,
       l.price,
-      l.listAgent,
       l.lastCallResult
+    ]);
+    notesBody.push([
+      letters[i],
+      l.notes
     ]);
   });
 
-  pdf.setFontSize(8);
+  // Listings information table.
   pdf.autoTable({
     startY: y,
-    head: listingsHeader1,
-    body: listingsBody1, 
+    head: listingsHeader,
+    body: listingsBody, 
     theme: 'plain',
     styles: {
-      halign: 'center',
+      fontSize: 10,
+      halign: 'left',
       cellPadding: 0.5
     }
   });
 
-  y = pdf.previousAutoTable.finalY + 8;
+  // Notes table.
+  y = pdf.previousAutoTable.finalY + 4;
   pdf.autoTable({
     startY: y,
-    head: listingsHeader2,
-    body: listingsBody2, 
+    head: notesHeader,
+    body: notesBody, 
     theme: 'plain',
-    styles: {
+    headStyles: {
       halign: 'center',
       cellPadding: 0.5
+    },
+    bodyStyles: {
+      fontSize: 8,
+      halign: 'left',
+      cellPadding: 0.25
     }
   });
 
   // Add created date and time.
   pdf.setFontSize(12);
-  y = pdf.previousAutoTable.finalY + 16;
+  y = pdf.previousAutoTable.finalY + 12;
   pdf.text(10, y, 'Created: ' + date.toDateString() + ' ' + date.toLocaleTimeString());
 
+  // Save the PDF.
   pdf.save('Report-' + date.toDateString().split(' ').join('-') + '.pdf');
 }
