@@ -30,8 +30,8 @@ function processData (excelData) {
       lastCallResult: l['Last Call Result'],
       statusChangeDate: l['Status Change Date'],
       listingStatus: l['Listing Status'],
-      taxAddress: l['Tax Address'] + ', ' + l['Tax City'] + ', ' + l['Tax State'] + ' ' + l['Tax Postal Code'],
-      address: l['Address'] + ', ' + l['City'] + ', ' + l['State'] + ' ' + l['Zip Code'],
+      taxAddress: l['Mailing Address'] + ', ' + l['Mailing City'] + ', ' + l['Mailing State'] + ' ' + l['Mailing Zip Code'],
+      address: l['Property Address'] + ', ' + l['Property City'] + ', ' + l['Property State'] + ' ' + l['Property Zip Code'],
       latLng: cache[l['MLS ID']] ? cache[l['MLS ID']] : null
     };
   });
