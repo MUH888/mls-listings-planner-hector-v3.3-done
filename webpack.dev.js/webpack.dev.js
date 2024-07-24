@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  mode: 'production', // Set the mode to 'production'
+  mode: 'development', // Set the mode to 'development'
   entry: './js/app.js', // Adjusted entry point to match your existing structure
   output: {
     filename: 'bundle.js', // Output file
@@ -22,5 +22,5 @@ module.exports = {
       },
     ],
   },
-  devtool: false, // Disable devtool for production
+  devtool: 'eval-source-map', // Use eval-source-map for better debugging
 };

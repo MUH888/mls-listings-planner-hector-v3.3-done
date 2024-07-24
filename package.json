@@ -5,24 +5,25 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "start": "live-server --entry-file=index.html"
+    "start": "live-server --entry-file=index.html",
+    "dev": "webpack --mode development --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BryceStPierre/mls-listings-planner.git"
+    "url": "git+https://github.com/MUH888/mls-listings-planner-hector-v3.3-done.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/BryceStPierre/mls-listings-planner/issues"
+    "url": "https://github.com/MUH888/mls-listings-planner-hector-v3.3-done/issues"
   },
-  "homepage": "https://github.com/BryceStPierre/mls-listings-planner#readme",
+  "homepage": "https://github.com/MUH888/mls-listings-planner-hector-v3.3-done#readme",
   "devDependencies": {
     "@babel/core": "^7.24.9",
     "@babel/preset-env": "^7.24.8",
     "babel-loader": "^9.1.3",
-    "live-server": "^1.2.2",
+    "live-server": "^1.2.1",
     "webpack": "^5.93.0",
     "webpack-cli": "^5.1.4"
   }
