@@ -14,11 +14,11 @@ var map,
     directionsDisplay;
 
 var colours = {
-  'Cancelled': '#00cc00',
-  'Expired': '#00cc00',
+  'Cancelled': '#0288d1',
+  'Expired': '#0f9d58',
   'FSBO': '#ff4d4d',
-  'Gated': '#1a1a1a',
-  'Busy': '#3366ff'   
+  'Gated': '#000000',
+  'Busy': '#FFA500'   
 };
 
 var icons = {
