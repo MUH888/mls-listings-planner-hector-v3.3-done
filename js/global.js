@@ -22,11 +22,11 @@ var colours = {
 };
 
 var icons = {
-  'Cancelled': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+  'Cancelled': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
   'Expired': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
   'FSBO': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
-  'Gated': './img/black-dot.png',
-  'Busy': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+  'Gated': 'http://maps.google.com/mapfiles/ms/icons/black-dot.png',
+  'Busy': 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png'
 };
 
 var letters = [
