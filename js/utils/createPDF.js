@@ -41,7 +41,7 @@ function createPDF () {
     body: stopsBody, 
     theme: 'plain',
     styles: {
-      fontSize: 9,
+      fontSize: 11,
       halign: 'center',
       cellPadding: 0.5
     }
@@ -53,7 +53,7 @@ function createPDF () {
   pdf.text(10, y, 'Directions');
   y += 6;
 
-  pdf.setFontSize(9);
+  pdf.setFontSize(11);
   var tab = 0;
   stopArray.forEach(function (s) {
     var width = pdf.getTextDimensions(s.listing.taxAddress).w;
@@ -61,13 +61,13 @@ function createPDF () {
       tab = width;
   });
 
-  pdf.setFontSize(10);
+  pdf.setFontSize(11);
   pdf.setFontStyle('bold');
   pdf.text(25, y, 'Tax Address');
   pdf.text(25 + tab + 10, y, 'Subject Address');
   y += 4;
 
-  pdf.setFontSize(9);
+  pdf.setFontSize(11);
   pdf.setFontStyle('normal');
   stopArray.forEach(function (s, i) {
     pdf.text(15, y, letters[i]);
@@ -122,7 +122,7 @@ function createPDF () {
     body: listingsBody, 
     theme: 'plain',
     styles: {
-      fontSize: 10,
+      fontSize: 11,
       halign: 'left',
       cellPadding: 0.5
     }
@@ -140,7 +140,7 @@ function createPDF () {
       cellPadding: 0.5
     },
     bodyStyles: {
-      fontSize: 8,
+      fontSize: 11,
       halign: 'left',
       cellPadding: 0.25
     }
