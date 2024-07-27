@@ -10,7 +10,7 @@ function setRouteTable () {
     var $tdLetter = $('<td />')
       .attr('scope', 'col')
       .text(letters[i]);
-    var $tdMlsId = $('<td />')
+    var $tdTaxAddress = $('<td />')
       .attr('scope', 'col')
       .text(s.mlsId)
       .mouseover(function () {
@@ -31,7 +31,7 @@ function setRouteTable () {
       });
 
     $tr.append($tdLetter);
-    $tr.append($tdMlsId);
+    $tr.append($tdTaxAddress);
     $tr.append($tdStatus);
     $tdClose.append($tdCloseButton);
     $tr.append($tdClose);

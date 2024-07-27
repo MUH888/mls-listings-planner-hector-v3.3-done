@@ -56,7 +56,7 @@ function createPDF () {
   pdf.setFontSize(11);
   var tab = 0;
   stopArray.forEach(function (s) {
-    var width = pdf.getTextDimensions(s.listing.taxAddress).w;
+    var width = pdf.getTextDimensions(s.listing.address.replace(/,([^,]*,[^,]*$)/, '$1')).w;
     if (width > tab)
       tab = width;
   });
@@ -73,12 +73,12 @@ function createPDF () {
     pdf.text(15, y, letters[i]);
 
     pdf.setTextColor('#00F');
-    pdf.textWithLink(s.listing.taxAddress, 25, y, {
-      url: encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + s.listing.taxAddress)
+    pdf.textWithLink(s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1'), 25, y, {
+      url: encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1'))
     });
 
     pdf.setTextColor('#000');
-    pdf.text(25 + tab + 10, y, s.listing.address);
+    pdf.text(25 + tab + 10, y, s.listing.address.replace(/,([^,]*,[^,]*$)/, '$1'));
     y += 4;
   });
 

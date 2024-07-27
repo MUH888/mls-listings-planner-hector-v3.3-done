@@ -5,8 +5,8 @@ function setListingInfo (l) {
   $('#tLastCallResult').text(l.lastCallResult);
   $('#tFullName').text(l.fullName);
   $('#tListingStatus').text(l.listingStatus);
-  $('#tAddress').text(l.address);
-  $('#tTaxAddress').text(l.taxAddress);
+  $('#tTaxAddress').text(l.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1'));  
+  $('#tAddress').text(l.address.replace(/,([^,]*,[^,]*$)/, '$1'));
   $('#tPhone').text(l.phone);
   $('#tEmail').text(l.email);
   $('#tListPrice').text(l.price);
