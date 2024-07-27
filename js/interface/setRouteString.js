@@ -1,4 +1,4 @@
-function setRouteString () {
+function setRouteString() {
   $('#routeString').html('');
 
   if (stopArray.getLength() === 0)
@@ -7,21 +7,21 @@ function setRouteString () {
   var string = '';
   stopArray.forEach(function (s, i) {
     if (i === stopArray.length - 1)
-      string += s.mlsId;
+      string += s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1'); // Use taxAddress
     else
-      string += s.mlsId + ', ';
+      string += s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1') + ', '; // Use taxAddress
   });
 
   var directions = '';
   stopArray.forEach(function (s, i) {
     if (i === stopArray.length - 1) {
-      directions += letters[i] 
-        + ': ' 
-        + encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + s.listing.taxAddress);
+      directions += letters[i]
+        + ': '
+        + encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1')); // Use taxAddress
     } else {
-      directions += letters[i] 
-        + ': ' 
-        + encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + s.listing.taxAddress)
+      directions += letters[i]
+        + ': '
+        + encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1')) // Use taxAddress
         + '\n';
     }
   });

@@ -1,116 +1,156 @@
-function createMap (elementId) {
-  
-  map = new google.maps.Map(document.getElementById(elementId), {
-    center: { lat: 25.763, lng: -80.193 },  // Miami, FL.
-    mapTypeControl: false,
-    rotateControl: false,
-    zoom: 11
-  });
-  
-  bounds = new google.maps.LatLngBounds();
-  geocoder = new google.maps.Geocoder();
-  markers = [];
+function createPDF () {
+  var pdf = new jsPDF('p', 'mm', 'letter');
+  var date = new Date();
+  var y = 20;
 
-  stopArray = new google.maps.MVCArray();
-  directionsService = new google.maps.DirectionsService;
-  directionsDisplay = new google.maps.DirectionsRenderer({ 
-    preserveViewport: true
+  pdf.setProperties({
+    title: 'Report-' + date.toDateString().split(' ').join('-'),
+    author: 'Hector Chomat',
+    creator: 'Hector Chomat',
+    subject: 'MLS Listing Planner Report - ' + date.toDateString(),
+    keywords: 'real estate, real estate listings, mls, multiple listing service, google maps'
   });
 
-  var resetControlDiv = document.createElement('div');
-  var resetControl = new ResetControl(resetControlDiv);
+  // Report title.
+  pdf.setFontSize(14);
+  pdf.text(10, y, 'MLS Listing Planner Report - ' + options.filename);
+  y += 8;
 
-  var undoControlDiv = document.createElement('div');
-  var undoControl = new UndoControl(undoControlDiv);
+  // Stops table.
+  pdf.setFontSize(12);
+  pdf.text(10, y, 'Stops');
+  y += 4;
 
-  resetControlDiv.index = 1;
-  undoControlDiv.index = 1;
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(resetControlDiv);
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(undoControlDiv);
+  var stopsHead = [
+    ['', 'Tax Address', 'Listing Status', 'Notes'], // Changed from MLS ID to Tax Address
+  ];
+  var stopsBody = [];
 
-  directionsDisplay.addListener('directions_changed', function () {
-    //console.log('Directions changed.');
-    if (stopArray.length === 0) {
-      $('#messageRoute').removeClass('hidden');
-      $('#contentRoute').addClass('hidden');
-    } else {
-      $('#messageRoute').addClass('hidden');
-      $('#contentRoute').removeClass('hidden');
+  stopArray.forEach(function (s, i) {
+    stopsBody.push([
+      letters[i],
+      s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1'), // This line changes the value from MLS ID to Tax Address
+      s.listingStatus,
+      '__________________________________________________'
+    ]);
+  });
+
+  pdf.autoTable({
+    startY: y,
+    head: stopsHead,
+    body: stopsBody, 
+    theme: 'plain',
+    styles: {
+      fontSize: 11,
+      halign: 'center',
+      cellPadding: 0.5
     }
-
-    setRouteTable();
-    setRouteString();
   });
-}
 
-function UndoControl (undoDiv) {
-  // Set CSS for the control border.
-  var undoButton = document.createElement('div');
-  undoButton.style.backgroundColor = '#fff';
-  undoButton.style.border = '2px solid #fff';
-  undoButton.style.borderRadius = '3px';
-  undoButton.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-  undoButton.style.cursor = 'pointer';
-  undoButton.style.marginTop = '10px';
-  undoButton.style.marginLeft = '10px';
-  undoButton.style.marginBottom = '10px';
-  undoButton.style.textAlign = 'center';
-  undoButton.title = 'Click to undo stop.';
-  undoDiv.appendChild(undoButton);
+  // Directions table.
+  y = pdf.previousAutoTable.finalY + 8 + 15;
+  pdf.setFontSize(12);
+  pdf.text(10, y, 'Directions');
+  y += 6;
 
-  // Set CSS for the control interior.
-  var undoText = document.createElement('div');
-  undoText.style.color = 'rgb(25,25,25)';
-  undoText.style.fontFamily = 'Roboto,Arial,sans-serif';
-  undoText.style.fontSize = '16px';
-  undoText.style.lineHeight = '38px';
-  undoText.style.paddingLeft = '5px';
-  undoText.style.paddingRight = '5px';
-  undoText.innerHTML = 'Undo Stop';
-  undoButton.appendChild(undoText);
-
-  undoButton.addEventListener('click', function () {
-    stopArray.pop();
-    if (stopArray.length === 1) // Pop again if only one stop remains.
-      stopArray.pop();
-
-    setRouteString();
-    setRouteTable();
-    updateDirections();
+  pdf.setFontSize(11);
+  var tab = 0;
+  stopArray.forEach(function (s) {
+    var width = pdf.getTextDimensions(s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1')).w;
+    if (width > tab)
+      tab = width;
   });
-}
 
-function ResetControl (resetDiv) {
-  // Set CSS for the control border.
-  var resetButton = document.createElement('div');
-  resetButton.style.backgroundColor = '#fff';
-  resetButton.style.border = '2px solid #fff';
-  resetButton.style.borderRadius = '3px';
-  resetButton.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-  resetButton.style.cursor = 'pointer';
-  resetButton.style.marginTop = '10px';
-  resetButton.style.marginLeft = '10px';
-  resetButton.style.marginBottom = '22px';
-  resetButton.style.textAlign = 'center';
-  resetButton.title = 'Click to reset stops.';
-  resetDiv.appendChild(resetButton);
+  pdf.setFontSize(11);
+  pdf.setFontStyle('bold');
+  pdf.text(25, y, 'Tax Address');
+  pdf.text(25 + tab + 10, y, 'Subject Address');
+  y += 4;
 
-  // Set CSS for the control interior.
-  var resetText = document.createElement('div');
-  resetText.style.color = 'rgb(25,25,25)';
-  resetText.style.fontFamily = 'Roboto,Arial,sans-serif';
-  resetText.style.fontSize = '16px';
-  resetText.style.lineHeight = '38px';
-  resetText.style.paddingLeft = '5px';
-  resetText.style.paddingRight = '5px';
-  resetText.innerHTML = 'Reset Stops';
-  resetButton.appendChild(resetText);
+  pdf.setFontSize(11);
+  pdf.setFontStyle('normal');
+  stopArray.forEach(function (s, i) {
+    pdf.text(15, y, letters[i]);
 
-  resetButton.addEventListener('click', function () {
-    stopArray.clear();
+    pdf.setTextColor('#00F');
+    pdf.textWithLink(s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1'), 25, y, {
+      url: encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1'))
+    });
 
-    setRouteString();
-    setRouteTable();
-    updateDirections();
+    pdf.setTextColor('#000');
+    pdf.text(25 + tab + 10, y, s.listing.address.replace(/,([^,]*,[^,]*$)/, '$1'));
+    y += 4;
   });
+
+  pdf.addPage();
+  y = 20;
+
+  //y += 4;
+  pdf.setFontSize(12);
+  pdf.text(10, y, 'Listing Information');
+  y += 4;
+
+  var listingsHeader = [
+    ['', 'Name', 'Listing Status', 'Price', 'Last Call Result']
+  ];
+  var listingsBody = [];
+
+  var notesHeader = [
+    ['', 'Notes']
+  ];
+  var notesBody = [];
+
+  stopArray.forEach(function (s, i) {
+    var l = s.listing;
+    listingsBody.push([
+      letters[i],
+      l.fullName,
+      l.listingStatus,
+      l.price,
+      l.lastCallResult
+    ]);
+    notesBody.push([
+      letters[i],
+      l.notes
+    ]);
+  });
+
+  // Listings information table.
+  pdf.autoTable({
+    startY: y,
+    head: listingsHeader,
+    body: listingsBody, 
+    theme: 'plain',
+    styles: {
+      fontSize: 11,
+      halign: 'left',
+      cellPadding: 0.5
+    }
+  });
+
+  // Notes table.
+  y = pdf.previousAutoTable.finalY + 4;
+  pdf.autoTable({
+    startY: y,
+    head: notesHeader,
+    body: notesBody, 
+    theme: 'plain',
+    headStyles: {
+      halign: 'center',
+      cellPadding: 0.5
+    },
+    bodyStyles: {
+      fontSize: 11,
+      halign: 'left',
+      cellPadding: 0.25
+    }
+  });
+
+  // Add created date and time.
+  pdf.setFontSize(12);
+  y = pdf.previousAutoTable.finalY + 12;
+  pdf.text(10, y, 'Created: ' + date.toDateString() + ' ' + date.toLocaleTimeString());
+
+  // Save the PDF.
+  pdf.save('Report-' + date.toDateString().split(' ').join('-') + '.pdf');
 }

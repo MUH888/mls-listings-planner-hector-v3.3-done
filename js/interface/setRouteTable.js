@@ -10,9 +10,9 @@ function setRouteTable () {
     var $tdLetter = $('<td />')
       .attr('scope', 'col')
       .text(letters[i]);
-    var $tdTaxAddress = $('<td />')
+    var $tdTaxAddress = $('<td />') // Changed from MLS ID to Tax Address
       .attr('scope', 'col')
-      .text(s.mlsId)
+      .text(s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1')) // This line changes the value from MLS ID to Tax Address
       .mouseover(function () {
         setListingInfo(stopArray.getAt(i).listing);
       });
@@ -31,7 +31,7 @@ function setRouteTable () {
       });
 
     $tr.append($tdLetter);
-    $tr.append($tdTaxAddress);
+    $tr.append($tdTaxAddress); // Changed from MLS ID to Tax Address
     $tr.append($tdStatus);
     $tdClose.append($tdCloseButton);
     $tr.append($tdClose);
@@ -39,14 +39,3 @@ function setRouteTable () {
     $('#routeTableBody').append($tr);
   });
 }
-
-// <tr>
-//   <td scope='col'>A</td>
-//   <td scope='col'>A1000000</td>
-//   <td scope='col'>Expired</td>
-//   <td scope='col'>
-//     <button type="button" class="close">
-//       <span aria-hidden="true">&times;</span>
-//     </button>
-//   </td>
-// </tr>

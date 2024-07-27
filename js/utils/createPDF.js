@@ -22,7 +22,7 @@ function createPDF () {
   y += 4;
 
   var stopsHead = [
-    ['', 'MLS ID', 'Listing Status', 'Notes'],
+    ['', 'MLS ID', 'Tax Address', 'Notes'],
   ];
   var stopsBody = [];
 
