@@ -17,7 +17,7 @@ var colours = {
   'Cancelled': '#0288d1',
   'Expired': '#0f9d58',
   'FSBO': '#ff4d4d',
-  'Gated': '#000000',
+  'Gated': '#ff9900',
   'Busy': '#FFA500'   
 };
 
@@ -25,8 +25,8 @@ var icons = {
   'Cancelled': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
   'Expired': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
   'FSBO': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
-  'Gated': 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
-  'Busy': 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png'
+  'Gated': 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
+  'Busy': 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
 };
 
 var letters = [

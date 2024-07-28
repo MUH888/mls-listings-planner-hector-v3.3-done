@@ -22,14 +22,14 @@ function createPDF () {
   y += 4;
 
   var stopsHead = [
-    ['', 'MLS ID', 'Tax Address', 'Notes'],
+    ['', 'Tax Address', 'Listing Status', 'Notes'],
   ];
   var stopsBody = [];
 
   stopArray.forEach(function (s, i) {
     stopsBody.push([
       letters[i],
-      s.mlsId,
+      s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1'), // Use taxAddress
       s.listingStatus,
       '__________________________________________________'
     ]);
@@ -85,7 +85,6 @@ function createPDF () {
   pdf.addPage();
   y = 20;
 
-  //y += 4;
   pdf.setFontSize(12);
   pdf.text(10, y, 'Listing Information');
   y += 4;
