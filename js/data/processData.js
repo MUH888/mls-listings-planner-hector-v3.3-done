@@ -1,4 +1,24 @@
-function processData (excelData) {
+function formatPhoneNumber(phone) {
+  if (!phone) {
+    return ''; // Return an empty string if phone number is undefined or null
+  }
+  return phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+}
+
+function formatPrice(price) {
+  if (isNaN(price) || price === null) {
+    return ''; // Return an empty string if price is not a number or is null
+  }
+  // Use Intl.NumberFormat to format the price without cents
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0, // No decimal places
+    maximumFractionDigits: 0 // No decimal places
+  }).format(price);
+}
+
+function processData(excelData) {
   var data = {
     listingStatus: [],
     listingsByStatus: {},
@@ -20,9 +40,9 @@ function processData (excelData) {
     return {
       mlsId: l['MLS ID'],
       fullName: l['Full Name'],
-      phone: l['Phone 1'] ? l['Phone 1'] : l['Mobile Phone'],
+      phone: l['Phone 1'] ? formatPhoneNumber(l['Phone 1']) : formatPhoneNumber(l['Mobile Phone']),
       email: l['Email 1'],
-      price: l['List Price'],
+      price: formatPrice(l['List Price']),
       notes: l['Notes'],
       listAgent: l['List Agent'],
       expiredDate: l['Expired Date'],
@@ -35,6 +55,6 @@ function processData (excelData) {
       latLng: cache[l['MLS ID']] ? cache[l['MLS ID']] : null
     };
   });
-  
+
   return data;
 }
