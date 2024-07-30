@@ -1,5 +1,4 @@
 function populateMap (listings) {
-
   listings.forEach(function (l) {
     var m = new google.maps.Marker({
       map: map,
@@ -9,14 +8,23 @@ function populateMap (listings) {
     });
 
     m.addListener('click', function () {
-      stopArray.push({
-        mlsId: l.mlsId,
-        listingStatus: l.listingStatus,
-        listing: l,
-        latLng: l.latLng
+      // Check if the marker is already in the stopArray
+      var exists = stopArray.getArray().some(function (stop) {
+        return stop.mlsId === l.mlsId;
       });
-      updateDirections();
-      setMapFile();
+
+      if (!exists) {
+        stopArray.push({
+          mlsId: l.mlsId,
+          listingStatus: l.listingStatus,
+          listing: l,
+          latLng: l.latLng
+        });
+        updateDirections();
+        setMapFile();
+      } else {
+        alert("This marker is already selected.");
+      }
     });
 
     m.addListener('mouseover', function () {
