@@ -9,18 +9,22 @@ function setRouteTable () {
 
     var $tdLetter = $('<td />')
       .attr('scope', 'col')
+      .css('text-align', 'left') // Align text to the left
       .text(letters[i]);
     var $tdTaxAddress = $('<td />') // Changed from MLS ID to Tax Address
       .attr('scope', 'col')
+      .css('text-align', 'left') // Align text to the left
       .text(s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1')) // This line changes the value from MLS ID to Tax Address
       .mouseover(function () {
         setListingInfo(stopArray.getAt(i).listing);
       });
     var $tdStatus = $('<td />')
       .attr('scope', 'col')
+      .css('text-align', 'left') // Align text to the left
       .text(s.listingStatus);
     var $tdClose = $('<td />')
-      .attr('scope', 'col');
+      .attr('scope', 'col')
+      .css('text-align', 'left'); // Align text to the left
     var $tdCloseButton = $('<button />')
       .attr('type', 'button')
       .attr('class', 'close')
