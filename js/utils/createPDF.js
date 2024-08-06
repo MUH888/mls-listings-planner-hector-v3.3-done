@@ -28,7 +28,7 @@ function createPDF() {
 
     stopArray.forEach(function (s, i) {
         stopsBody.push([
-            letters[i],
+            (i + 1).toString(), // Rank by number
             s.listing.fullName + '\n\n' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1') + '\n\n' + s.listing.mlsId, // Added extra line breaks for spacing
             s.listingStatus,
             '_____________________________\n\n_____________________________\n\n_____________________________\n\n_____________________________\n\n\n' // 4 lines for notes with space after each property
@@ -77,7 +77,7 @@ function createPDF() {
     pdf.setFontSize(11);
     pdf.setFontStyle('normal');
     stopArray.forEach(function (s, i) {
-        pdf.text(15, y, letters[i]);
+        pdf.text(15, y, (i + 1).toString()); // Rank by number
 
         pdf.setTextColor('#00F');
         pdf.textWithLink(s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1'), 25, y, {
@@ -109,14 +109,14 @@ function createPDF() {
     stopArray.forEach(function (s, i) {
         var l = s.listing;
         listingsBody.push([
-            letters[i],
+            (i + 1).toString(), // Rank by number
             l.fullName,
             l.listingStatus,
             l.price,
             l.lastCallResult
         ]);
         notesBody.push([
-            letters[i],
+            (i + 1).toString(), // Rank by number
             l.notes // Use the actual notes from the listing
         ]);
     });
