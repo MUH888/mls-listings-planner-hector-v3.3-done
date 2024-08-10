@@ -29,9 +29,9 @@ function createPDF() {
     stopArray.forEach(function (s, i) {
         stopsBody.push([
             (i + 1).toString(), // Rank by number
-            s.listing.fullName + '\n\n' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1') + '\n\n' + s.listing.mlsId, // Added extra line breaks for spacing
+            s.listing.fullName + '\n\n' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1') + '\n\n' + s.listing.mlsId + '\n\n' + s.listing.daysOnMarket + ' days\n\n' + s.listing.phone, // Added Days On Market and Phone Number
             s.listingStatus,
-            '_____________________________\n\n_____________________________\n\n_____________________________\n\n_____________________________\n\n\n' // 4 lines for notes with space after each property
+            '_____________________________\n\n_____________________________\n\n_____________________________\n\n_____________________________\n\n\n\n\n' // 4 lines for notes with space after each property
         ]);
     });
 
@@ -44,7 +44,7 @@ function createPDF() {
             fontSize: 11,
             halign: 'left', // Align columns to the left
             cellPadding: 0.5,
-            lineHeight: 1.5 // Add spacing between lines
+            lineHeight: 2.0 // Add spacing between lines
         },
         didDrawPage: function (data) {
             // Avoid overlapping headers when a new page starts
@@ -149,7 +149,7 @@ function createPDF() {
             fontSize: 11,
             halign: 'left', // Align columns to the left
             cellPadding: 0.25,
-            lineHeight: 1.5 // Add spacing between lines
+            lineHeight: 2.0 // Add spacing between lines
         }
     });
 

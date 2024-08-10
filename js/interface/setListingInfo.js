@@ -10,5 +10,6 @@ function setListingInfo (l) {
   $('#tPhone').text(l.phone);
   $('#tEmail').text(l.email);
   $('#tListPrice').text(l.price);
+  $('#tDaysOnMarket').text(l.daysOnMarket);
   $('#tNotes').text(l.notes);
 }

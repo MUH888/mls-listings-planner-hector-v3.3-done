@@ -52,6 +52,7 @@ function processData(excelData) {
       listingStatus: l['Listing Status'],
       taxAddress: l['Mailing Address'] + ', ' + l['Mailing City'] + ', ' + l['Mailing State'] + ' ' + l['Mailing Zip Code'],
       address: l['Property Address'] + ', ' + l['Property City'] + ', ' + l['Property State'] + ' ' + l['Property Zip Code'],
+      daysOnMarket: l['Days On Market'],
       latLng: cache[l['MLS ID']] ? cache[l['MLS ID']] : null
     };
   });
