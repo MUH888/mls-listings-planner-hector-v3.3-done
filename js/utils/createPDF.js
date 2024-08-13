@@ -1,19 +1,20 @@
 function createPDF() {
     var pdf = new jsPDF('p', 'mm', 'letter');
     var date = new Date();
+    var formattedDate = date.toISOString().slice(0, 10); // Format date as YYYY-MM-DD
     var y = 20;
 
     pdf.setProperties({
-        title: 'Report-' + date.toDateString().split(' ').join('-'),
+        title: 'Report-' + formattedDate.split('-').join('-'),
         author: 'Hector Chomat',
         creator: 'Hector Chomat',
-        subject: 'MLS Listing Planner Report - ' + date.toDateString(),
+        subject: formattedDate + ' - Red Folder Routine Planner',
         keywords: 'real estate, real estate listings, mls, multiple listing service, google maps'
     });
 
     // Report title.
     pdf.setFontSize(14);
-    pdf.text(10, y, 'MLS Listing Planner Report - ' + options.filename);
+    pdf.text(10, y, formattedDate + ' - Red Folder Routine Planner');
     y += 8;
 
     // Stops table.
@@ -156,8 +157,8 @@ function createPDF() {
     // Add created date and time.
     pdf.setFontSize(12);
     y = pdf.previousAutoTable.finalY + 12;
-    pdf.text(10, y, 'Created: ' + date.toDateString() + ' ' + date.toLocaleTimeString());
+    pdf.text(10, y, 'Created: ' + formattedDate + ' ' + date.toLocaleTimeString());
 
     // Save the PDF.
-    pdf.save('Report-' + date.toDateString().split(' ').join('-') + '.pdf');
+    pdf.save('Report-' + formattedDate.split('-').join('-') + '.pdf');
 }
