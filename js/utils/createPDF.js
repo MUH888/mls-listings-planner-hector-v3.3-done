@@ -3,15 +3,16 @@ function createPDF() {
     var date = new Date();
     var formattedDate = date.toISOString().slice(0, 10); // Format date as YYYY-MM-DD
     var y = 20;
-
+    
     // Retrieve the selected Agent and VA values
     var agentName = document.getElementById('selectAgent').value;
     var vaName = document.getElementById('selectVA').value;
-
-    // Function to add footer with Agent and VA names
-    function addFooter() {
+    
+    // Function to add footer with Agent and VA names and page numbers
+    function addFooter(pageNumber, totalPages) {
         pdf.setFontSize(11);
         pdf.text(20, pdf.internal.pageSize.height - 10, agentName + ' | ' + vaName); // Adjust position if needed
+        pdf.text(pdf.internal.pageSize.width - 30, pdf.internal.pageSize.height - 10, pageNumber + ' of ' + totalPages);
     }
 
     pdf.setProperties({
@@ -59,7 +60,7 @@ function createPDF() {
         },
         showHead: 'firstPage', // This ensures the header only appears on the first page
         didDrawPage: function (data) {
-            addFooter(); // Add the footer on each page
+            addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages()); // Add the footer on each page
             y = 20; // Reset Y for the next section
         }
     });
@@ -102,7 +103,7 @@ function createPDF() {
     });
 
     // Add the footer again since a new page was added
-    addFooter();
+    addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages());
 
     // Start new page for Listing Information
     pdf.addPage();
@@ -149,7 +150,7 @@ function createPDF() {
             cellPadding: 0.5
         },
         didDrawPage: function (data) {
-            addFooter(); // Add the footer on each page
+            addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages()); // Add the footer on each page
         }
     });
 
@@ -176,7 +177,7 @@ function createPDF() {
             lineHeight: 2.0 // Add spacing between lines
         },
         didDrawPage: function (data) {
-            addFooter(); // Add the footer on each page
+            addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages()); // Add the footer on each page
         }
     });
 
@@ -186,7 +187,7 @@ function createPDF() {
     pdf.text(10, y, 'Created: ' + formattedDate + ' ' + date.toLocaleTimeString());
 
     // Add the footer one last time at the end of the document
-    addFooter();
+    addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages());
 
     // Save the PDF
     pdf.save('Report-' + formattedDate + '.pdf');
