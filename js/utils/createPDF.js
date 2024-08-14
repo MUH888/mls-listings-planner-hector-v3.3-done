@@ -4,20 +4,30 @@ function createPDF() {
     var formattedDate = date.toISOString().slice(0, 10); // Format date as YYYY-MM-DD
     var y = 20;
 
+    // Retrieve the selected Agent and VA values
+    var agentName = document.getElementById('selectAgent').value;
+    var vaName = document.getElementById('selectVA').value;
+
+    // Function to add footer with Agent and VA names
+    function addFooter() {
+        pdf.setFontSize(11);
+        pdf.text(20, pdf.internal.pageSize.height - 10, agentName + ' | ' + vaName); // Adjust position if needed
+    }
+
     pdf.setProperties({
-        title: 'Report-' + formattedDate.split('-').join('-'),
+        title: 'Report-' + formattedDate,
         author: 'Hector Chomat',
         creator: 'Hector Chomat',
         subject: formattedDate + ' - Red Folder Routine Planner',
         keywords: 'real estate, real estate listings, mls, multiple listing service, google maps'
     });
 
-    // Report title.
+    // Report title
     pdf.setFontSize(14);
     pdf.text(10, y, formattedDate + ' - Red Folder Routine Planner');
     y += 8;
 
-    // Stops table.
+    // Stops table
     pdf.setFontSize(12);
     pdf.text(10, y, 'Stops');
     y += 4;
@@ -30,7 +40,7 @@ function createPDF() {
     stopArray.forEach(function (s, i) {
         stopsBody.push([
             (i + 1).toString(), // Rank by number
-            s.listing.fullName + '\n\n' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1') + '\n\n' + s.listing.mlsId + '\n\n' + s.listing.daysOnMarket + ' days\n\n' + s.listing.phone, // Added Days On Market and Phone Number
+            s.listing.fullName + '\n\n' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1') + '\n\n' + s.listing.mlsId + '\n\n' + s.listing.daysOnMarket + ' days\n\n' + s.listing.phone,
             s.listingStatus,
             '_____________________________\n\n_____________________________\n\n_____________________________\n\n_____________________________\n\n\n\n\n' // 4 lines for notes with space after each property
         ]);
@@ -47,16 +57,17 @@ function createPDF() {
             cellPadding: 0.5,
             lineHeight: 2.0 // Add spacing between lines
         },
+        showHead: 'firstPage', // This ensures the header only appears on the first page
         didDrawPage: function (data) {
-            // Avoid overlapping headers when a new page starts
-            if (data.pageNumber !== 1) {
-                y = 20;
-            }
+            addFooter(); // Add the footer on each page
+            y = 20; // Reset Y for the next section
         }
     });
 
-    // Directions table.
-    y = pdf.previousAutoTable.finalY + 15; // Increased space between sections
+    // Start new page for Directions table
+    pdf.addPage();
+    y = 20;
+
     pdf.setFontSize(12);
     pdf.text(10, y, 'Directions');
     y += 10;
@@ -90,6 +101,10 @@ function createPDF() {
         y += 10; // Increased space between lines
     });
 
+    // Add the footer again since a new page was added
+    addFooter();
+
+    // Start new page for Listing Information
     pdf.addPage();
     y = 20;
 
@@ -122,7 +137,7 @@ function createPDF() {
         ]);
     });
 
-    // Listings information table.
+    // Listings information table
     pdf.autoTable({
         startY: y,
         head: listingsHeader,
@@ -132,11 +147,16 @@ function createPDF() {
             fontSize: 11,
             halign: 'left', // Align columns to the left
             cellPadding: 0.5
+        },
+        didDrawPage: function (data) {
+            addFooter(); // Add the footer on each page
         }
     });
 
-    // Notes table.
-    y = pdf.previousAutoTable.finalY + 4;
+    // Start new page for Notes table
+    pdf.addPage();
+    y = 20;
+
     pdf.autoTable({
         startY: y,
         head: notesHeader,
@@ -151,14 +171,20 @@ function createPDF() {
             halign: 'left', // Align columns to the left
             cellPadding: 0.25,
             lineHeight: 2.0 // Add spacing between lines
+        },
+        didDrawPage: function (data) {
+            addFooter(); // Add the footer on each page
         }
     });
 
-    // Add created date and time.
+    // Add created date and time
     pdf.setFontSize(12);
     y = pdf.previousAutoTable.finalY + 12;
     pdf.text(10, y, 'Created: ' + formattedDate + ' ' + date.toLocaleTimeString());
 
-    // Save the PDF.
-    pdf.save('Report-' + formattedDate.split('-').join('-') + '.pdf');
+    // Add the footer one last time at the end of the document
+    addFooter();
+
+    // Save the PDF
+    pdf.save('Report-' + formattedDate + '.pdf');
 }
