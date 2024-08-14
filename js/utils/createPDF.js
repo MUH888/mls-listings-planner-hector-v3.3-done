@@ -153,9 +153,12 @@ function createPDF() {
         }
     });
 
-    // Start new page for Notes table
-    pdf.addPage();
-    y = 20;
+    // Adjust Y position for the Notes table to start immediately after Listings table
+    y = pdf.previousAutoTable.finalY + 12;
+
+    pdf.setFontSize(12);
+    pdf.text(10, y, 'Notes');
+    y += 4;
 
     pdf.autoTable({
         startY: y,
