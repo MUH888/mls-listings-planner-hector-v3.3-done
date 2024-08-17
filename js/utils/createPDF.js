@@ -8,21 +8,6 @@ function createPDF() {
     var agentName = document.getElementById('selectAgent').value;
     var vaName = document.getElementById('selectVA').value;
     
-// Footer
-function addFooter(pageNumber, totalPages) {
-    // Left side: created date (YYYY-MM-DD)
-    pdf.setFontSize(10);
-    pdf.text(20, pdf.internal.pageSize.height - 10, formattedDate);
-
-    // Center: Agent Name | VA Name (larger font size)
-    pdf.setFontSize(11);
-    pdf.text(pdf.internal.pageSize.width / 2, pdf.internal.pageSize.height - 10, agentName + ' | ' + vaName, { align: 'center' });
-
-    // Right side: page number of total pages
-    pdf.setFontSize(10);
-    pdf.text(pdf.internal.pageSize.width - 30, pdf.internal.pageSize.height - 10, pageNumber + ' of ' + totalPages);
-}
-
     pdf.setProperties({
         title: 'Report-' + formattedDate,
         author: 'Hector Chomat',
@@ -36,32 +21,56 @@ function addFooter(pageNumber, totalPages) {
     pdf.text(10, y, formattedDate + ' - Red Folder Routine Planner');
     y += 8;
 
-// Stops table
-pdf.setFontSize(12);
-pdf.text(10, y, 'Stops');
-y += 4;
+    // Stops table
+    pdf.setFontSize(12);
+    pdf.text(10, y, 'Stops');
+    y += 4;
 
-var stopsHead = [
-    ['', 'Tax Address', 'Listing Status', 'Notes'],
-];
-var stopsPerPage = 4; // Limit to 4 stops per page
-var stopCounter = 0; // Counter for stops
-var stopsBody = [];
-var pageCounter = 1; // To track the page number for the stops table
+    var stopsHead = [
+        ['', 'Tax Address', 'Listing Status', 'Notes'],
+    ];
+    var stopsPerPage = 4; // Limit to 4 stops per page
+    var stopCounter = 0; // Counter for stops
+    var stopsBody = [];
+    var pageCounter = 1; // To track the page number for the stops table
 
-stopArray.forEach(function (s, i) {
-    // Add stop data to the stopsBody array
-    stopsBody.push([
-        (i + 1).toString(), // Rank by number
-        s.listing.fullName + '\n\n' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1') + '\n\n' + s.listing.mlsId + '\n\n' + s.listing.daysOnMarket + ' days\n\n' + s.listing.phone,
-        s.listingStatus,
-        '_____________________________\n\n_____________________________\n\n_____________________________\n\n_____________________________\n\n\n\n\n' // 4 lines for notes with space after each property
-    ]);
+    stopArray.forEach(function (s, i) {
+        // Add stop data to the stopsBody array
+        stopsBody.push([
+            (i + 1).toString(), // Rank by number
+            s.listing.fullName + '\n\n' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1') + '\n\n' + s.listing.mlsId + '\n\n' + s.listing.daysOnMarket + ' days\n\n' + s.listing.phone,
+            s.listingStatus,
+            '_____________________________\n\n_____________________________\n\n_____________________________\n\n_____________________________\n\n\n\n\n' // 4 lines for notes with space after each property
+        ]);
 
-    stopCounter++; // Increment the stop counter
+        stopCounter++; // Increment the stop counter
 
-    // Check if we've reached the limit of stops per page
-    if (stopCounter % stopsPerPage === 0) {
+        // Check if we've reached the limit of stops per page
+        if (stopCounter % stopsPerPage === 0) {
+            pdf.autoTable({
+                startY: y,
+                head: stopsHead,
+                body: stopsBody,
+                theme: 'plain',
+                styles: {
+                    fontSize: 11,
+                    halign: 'left',
+                    cellPadding: 0.5,
+                    lineHeight: 2.0
+                },
+                showHead: (pageCounter === 1) ? 'firstPage' : 'never', // Show header only on the first page
+            });
+
+            // Add a new page and reset stopsBody for the new page
+            pdf.addPage();
+            y = 20;
+            stopsBody = [];
+            pageCounter++; // Increment the page counter
+        }
+    });
+
+    // Draw the remaining stops if any
+    if (stopsBody.length > 0) {
         pdf.autoTable({
             startY: y,
             head: stopsHead,
@@ -74,40 +83,8 @@ stopArray.forEach(function (s, i) {
                 lineHeight: 2.0
             },
             showHead: (pageCounter === 1) ? 'firstPage' : 'never', // Show header only on the first page
-            didDrawPage: function (data) {
-                addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages()); // Add the footer on each page
-                y = 20; // Reset Y for the next section
-            }
         });
-
-        // Add a new page and reset stopsBody for the new page
-        pdf.addPage();
-        y = 20;
-        stopsBody = [];
-        pageCounter++; // Increment the page counter
     }
-});
-
-// Draw the remaining stops if any
-if (stopsBody.length > 0) {
-    pdf.autoTable({
-        startY: y,
-        head: stopsHead,
-        body: stopsBody,
-        theme: 'plain',
-        styles: {
-            fontSize: 11,
-            halign: 'left',
-            cellPadding: 0.5,
-            lineHeight: 2.0
-        },
-        showHead: (pageCounter === 1) ? 'firstPage' : 'never', // Show header only on the first page
-        didDrawPage: function (data) {
-            addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages());
-        }
-    });
-}
-
 
     // Start new page for Directions table
     pdf.addPage();
@@ -145,9 +122,6 @@ if (stopsBody.length > 0) {
         pdf.text(25 + tab + 20, y, s.listing.address.replace(/,([^,]*,[^,]*$)/, '$1'));
         y += 10; // Increased space between lines
     });
-
-    // Add the footer again since a new page was added
-    addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages());
 
     // Start new page for Listing Information
     pdf.addPage();
@@ -192,9 +166,6 @@ if (stopsBody.length > 0) {
             fontSize: 11,
             halign: 'left', // Align columns to the left
             cellPadding: 0.5
-        },
-        didDrawPage: function (data) {
-            addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages()); // Add the footer on each page
         }
     });
 
@@ -219,15 +190,33 @@ if (stopsBody.length > 0) {
             halign: 'left', // Align columns to the left
             cellPadding: 0.25,
             lineHeight: 2.0 // Add spacing between lines
-        },
-        didDrawPage: function (data) {
-            addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages()); // Add the footer on each page
         }
     });
 
-    // Add the footer one last time at the end of the document
-    addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages());
+    // After adding all content, calculate the total number of pages
+    var totalPages = pdf.internal.getNumberOfPages();
+
+    // Loop through each page to add the footer
+    for (let i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        addFooter(i, totalPages);
+    }
 
     // Save the PDF
     pdf.save('Report-' + formattedDate + '.pdf');
+
+    // Footer function
+    function addFooter(pageNumber, totalPages) {
+        // Left side: created date (YYYY-MM-DD)
+        pdf.setFontSize(10);
+        pdf.text(20, pdf.internal.pageSize.height - 10, formattedDate);
+
+        // Center: Agent Name | VA Name (larger font size)
+        pdf.setFontSize(11);
+        pdf.text(pdf.internal.pageSize.width / 2, pdf.internal.pageSize.height - 10, agentName + ' | ' + vaName, { align: 'center' });
+
+        // Right side: page number of total pages
+        pdf.setFontSize(10);
+        pdf.text(pdf.internal.pageSize.width - 30, pdf.internal.pageSize.height - 10, pageNumber + ' of ' + totalPages);
+    }
 }
