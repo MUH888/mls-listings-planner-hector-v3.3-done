@@ -8,12 +8,20 @@ function createPDF() {
     var agentName = document.getElementById('selectAgent').value;
     var vaName = document.getElementById('selectVA').value;
     
-    // Function to add footer with Agent and VA names and page numbers
-    function addFooter(pageNumber, totalPages) {
-        pdf.setFontSize(11);
-        pdf.text(20, pdf.internal.pageSize.height - 10, agentName + ' | ' + vaName); // Adjust position if needed
-        pdf.text(pdf.internal.pageSize.width - 30, pdf.internal.pageSize.height - 10, pageNumber + ' of ' + totalPages);
-    }
+// Footer
+function addFooter(pageNumber, totalPages) {
+    // Left side: created date (YYYY-MM-DD)
+    pdf.setFontSize(10);
+    pdf.text(20, pdf.internal.pageSize.height - 10, formattedDate);
+
+    // Center: Agent Name | VA Name (larger font size)
+    pdf.setFontSize(11);
+    pdf.text(pdf.internal.pageSize.width / 2, pdf.internal.pageSize.height - 10, agentName + ' | ' + vaName, { align: 'center' });
+
+    // Right side: page number of total pages
+    pdf.setFontSize(10);
+    pdf.text(pdf.internal.pageSize.width - 30, pdf.internal.pageSize.height - 10, pageNumber + ' of ' + totalPages);
+}
 
     pdf.setProperties({
         title: 'Report-' + formattedDate,
@@ -216,11 +224,6 @@ if (stopsBody.length > 0) {
             addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages()); // Add the footer on each page
         }
     });
-
-    // Add created date and time
-    pdf.setFontSize(12);
-    y = pdf.previousAutoTable.finalY + 12;
-    pdf.text(10, y, 'Created: ' + formattedDate + ' ' + date.toLocaleTimeString());
 
     // Add the footer one last time at the end of the document
     addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages());
