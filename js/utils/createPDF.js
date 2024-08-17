@@ -28,25 +28,60 @@ function createPDF() {
     pdf.text(10, y, formattedDate + ' - Red Folder Routine Planner');
     y += 8;
 
-    // Stops table
-    pdf.setFontSize(12);
-    pdf.text(10, y, 'Stops');
-    y += 4;
+// Stops table
+pdf.setFontSize(12);
+pdf.text(10, y, 'Stops');
+y += 4;
 
-    var stopsHead = [
-        ['', 'Tax Address', 'Listing Status', 'Notes'],
-    ];
-    var stopsBody = [];
+var stopsHead = [
+    ['', 'Tax Address', 'Listing Status', 'Notes'],
+];
+var stopsPerPage = 4; // Limit to 4 stops per page
+var stopCounter = 0; // Counter for stops
+var stopsBody = [];
+var pageCounter = 1; // To track the page number for the stops table
 
-    stopArray.forEach(function (s, i) {
-        stopsBody.push([
-            (i + 1).toString(), // Rank by number
-            s.listing.fullName + '\n\n' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1') + '\n\n' + s.listing.mlsId + '\n\n' + s.listing.daysOnMarket + ' days\n\n' + s.listing.phone,
-            s.listingStatus,
-            '_____________________________\n\n_____________________________\n\n_____________________________\n\n_____________________________\n\n\n\n\n' // 4 lines for notes with space after each property
-        ]);
-    });
+stopArray.forEach(function (s, i) {
+    // Add stop data to the stopsBody array
+    stopsBody.push([
+        (i + 1).toString(), // Rank by number
+        s.listing.fullName + '\n\n' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1') + '\n\n' + s.listing.mlsId + '\n\n' + s.listing.daysOnMarket + ' days\n\n' + s.listing.phone,
+        s.listingStatus,
+        '_____________________________\n\n_____________________________\n\n_____________________________\n\n_____________________________\n\n\n\n\n' // 4 lines for notes with space after each property
+    ]);
 
+    stopCounter++; // Increment the stop counter
+
+    // Check if we've reached the limit of stops per page
+    if (stopCounter % stopsPerPage === 0) {
+        pdf.autoTable({
+            startY: y,
+            head: stopsHead,
+            body: stopsBody,
+            theme: 'plain',
+            styles: {
+                fontSize: 11,
+                halign: 'left',
+                cellPadding: 0.5,
+                lineHeight: 2.0
+            },
+            showHead: (pageCounter === 1) ? 'firstPage' : 'never', // Show header only on the first page
+            didDrawPage: function (data) {
+                addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages()); // Add the footer on each page
+                y = 20; // Reset Y for the next section
+            }
+        });
+
+        // Add a new page and reset stopsBody for the new page
+        pdf.addPage();
+        y = 20;
+        stopsBody = [];
+        pageCounter++; // Increment the page counter
+    }
+});
+
+// Draw the remaining stops if any
+if (stopsBody.length > 0) {
     pdf.autoTable({
         startY: y,
         head: stopsHead,
@@ -54,16 +89,17 @@ function createPDF() {
         theme: 'plain',
         styles: {
             fontSize: 11,
-            halign: 'left', // Align columns to the left
+            halign: 'left',
             cellPadding: 0.5,
-            lineHeight: 2.0 // Add spacing between lines
+            lineHeight: 2.0
         },
-        showHead: 'firstPage', // This ensures the header only appears on the first page
+        showHead: (pageCounter === 1) ? 'firstPage' : 'never', // Show header only on the first page
         didDrawPage: function (data) {
-            addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages()); // Add the footer on each page
-            y = 20; // Reset Y for the next section
+            addFooter(pdf.internal.getCurrentPageInfo().pageNumber, pdf.internal.getNumberOfPages());
         }
     });
+}
+
 
     // Start new page for Directions table
     pdf.addPage();
