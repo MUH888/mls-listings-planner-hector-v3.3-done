@@ -207,12 +207,15 @@ function createPDF() {
 
     // Footer function
     function addFooter(pageNumber, totalPages) {
-        // Left side: created date (YYYY-MM-DD)
-        pdf.setFontSize(10);
-        pdf.text(20, pdf.internal.pageSize.height - 10, formattedDate);
+    // Left side: "Created" label in bold with the date
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold'); // Set font to bold
+    pdf.text(20, pdf.internal.pageSize.height - 10, 'Created:');
+    pdf.setFont('helvetica', 'normal'); // Revert font to normal
+    pdf.text(40, pdf.internal.pageSize.height - 10, formattedDate);
 
         // Center: Agent Name | VA Name (larger font size)
-        pdf.setFontSize(11);
+        pdf.setFontSize(12);
         pdf.text(pdf.internal.pageSize.width / 2, pdf.internal.pageSize.height - 10, agentName + ' | ' + vaName, { align: 'center' });
 
         // Right side: page number of total pages
