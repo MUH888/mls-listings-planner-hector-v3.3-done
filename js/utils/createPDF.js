@@ -212,7 +212,7 @@ function createPDF() {
     pdf.setFont('helvetica', 'bold'); // Set font to bold
     pdf.text(20, pdf.internal.pageSize.height - 10, 'Created:');
     pdf.setFont('helvetica', 'normal'); // Revert font to normal
-    pdf.text(40, pdf.internal.pageSize.height - 10, formattedDate);
+    pdf.text(36, pdf.internal.pageSize.height - 10, formattedDate);
 
         // Center: Agent Name | VA Name (larger font size)
         pdf.setFontSize(12);
