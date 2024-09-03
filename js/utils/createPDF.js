@@ -38,10 +38,10 @@ function createPDF() {
         // Add stop data to the stopsBody array
         stopsBody.push([
             (i + 1).toString(), // Rank by number
-            s.listing.fullName + '\n\n' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1') + '\n\n' + s.listing.mlsId + '\n\n' + s.listing.daysOnMarket + ' days\n\n' + s.listing.phone,
+            s.listing.fullName + '\n\n' + s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1') + '\n\n' + s.listing.mlsId + '\n\n' + s.listing.daysOnMarket + ' days  |  DOB: ____________\n\n' + s.listing.phone,
             s.listingStatus,
             '_____________________________\n\n_____________________________\n\n_____________________________\n\n_____________________________\n\n\n\n\n' // 4 lines for notes with space after each property
-        ]);
+        ]);        
 
         stopCounter++; // Increment the stop counter
 
