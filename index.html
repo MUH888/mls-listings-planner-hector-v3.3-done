@@ -1,238 +1,254 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Red Folder Routine Planner</title>
-  <meta http-equiv='content-type' content='text/html;charset=utf-8' />
-  <meta name='viewport' content='initial-scale=1.0,user-scalable=no' />
-
-  <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' type='text/css'>
-  <link rel='stylesheet' href='css/style.css' type='text/css'>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  
+  <!-- Preconnect for better performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  
+  <!-- Font Awesome (Upgraded to version 6.4.0) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <!-- Your Custom CSS -->
+  <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
 <body>
 
-<!-- Header. -->
-<nav class='navbar navbar-dark bg-primary'>
-  <span class='navbar-brand'>Red Folder Routine Planner</span>
-  <span class='navbar-text'>
-    <span id='greeting'>Hello</span>, Hector.
-  </span>
-</nav>
-
-<!-- Web storage message. -->
-<div id='messageWebStorage' class='alert alert-danger text-center hidden' role='alert'>
-  <b>Error: </b>There is no HTML web storage available. Please use the latest version of Chrome or Firefox.
-</div>
-
-<!-- Main container. -->
-<div class='container-fluid mt-3'>
-  <div class='row'>
-
-    <!-- Left panel. -->
-    <div class='col-md-4'>
-      <!-- <button id='buttonTestPdf' class='btn btn-primary'>Test PDF</button> -->
-
-      <!-- Import container. -->
-      <div id='containerImport'>
-        <h4>Import</h4>
-        <div id='messageImport' class='alert alert-danger hidden' role='alert'></div>
-        <p class='mb-1'>Import an Excel worksheet of new listings:</p>
-        <div class='custom-file mb-2'>
-          <input id='fileExcel' class='custom-file-input' type='file' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'>
-          <label class='custom-file-label' for='fileExcel'>No file selected.</label>
-        </div>
-        <p class='mt-2 mb-2 text-center'><b>OR</b></p>
-        <p class='mb-1'>Import a saved map:</p>
-        <div class='custom-file'>
-          <input id='fileMap' class='custom-file-input' type='file' accept='application/json'>
-          <label class='custom-file-label' for='fileMap'>No file selected.</label>
-        </div>
-      </div>
-
-
-      <!-- Filter container. -->
-      <div id='containerFilter' class='hidden'>
-        <h4>Filter</h4>
-        <div id='spinner' class='text-center hidden'>
-          <div class='spinner-border text-primary' role='status'></div>
-        </div>
-        <div id='contentFilter' class='hidden'>
-          <div class='alert alert-success' role='alert'>
-            Imported <b id='excelRowCount'>0</b> listings from <b id='excelFileName'>filename</b>.
+  <!-- Header -->
+  <header>
+    <nav class="navbar navbar-dark bg-primary">
+      <span class="navbar-brand">Red Folder Routine Planner</span>
+      <span class="navbar-text">
+        <span id="greeting">Hello</span>, Hector.
+      </span>
+    </nav>
+  </header>
+  
+  <!-- Web storage message -->
+  <div id="messageWebStorage" class="alert alert-danger text-center hidden" role="alert" aria-live="polite">
+    <strong>Error:</strong> There is no HTML web storage available. Please use the latest version of Chrome or Firefox.
+  </div>
+  
+  <!-- Main content -->
+  <main class="container-fluid mt-3">
+    <div class="row">
+  
+      <!-- Left panel -->
+      <section class="col-md-4">
+        <!-- Import container -->
+        <section id="containerImport">
+          <h3>Import</h3>
+          <div id="messageImport" class="alert alert-danger hidden" role="alert" aria-live="polite"></div>
+          <p class="mb-1">Import an Excel worksheet of new listings:</p>
+          <div class="custom-file mb-2">
+            <input id="fileExcel" class="custom-file-input" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" aria-describedby="fileExcelLabel">
+            <label class="custom-file-label" for="fileExcel" id="fileExcelLabel">No file selected.</label>
           </div>
-          <div id='filterCheckboxes' class='mb-2'>
-            <p class='mb-2'>Select the listing statuses to include:</p>
+          <p class="mt-2 mb-2 text-center"><strong>OR</strong></p>
+          <p class="mb-1">Import a saved map:</p>
+          <div class="custom-file">
+            <input id="fileMap" class="custom-file-input" type="file" accept="application/json" aria-describedby="fileMapLabel">
+            <label class="custom-file-label" for="fileMap" id="fileMapLabel">No file selected.</label>
           </div>
-          <p class='mb-2'><b>Note:</b> Each listing will cost a geocoding API request.</p>
-          <button id='buttonNext' class='btn btn-primary mt-2'>Next&ensp;<i class='fa fa-chevron-right'></i></button>
-        </div>
-      </div>
-
-      <!-- Geocode container. -->
-      <div id='containerGeocode' class='hidden'>
-        <h4>Geocode</h4>
-        <p class='mb-2'>Locating MLS listings...</p>
-        <div class='progress'>
-          <div id='progressBar' class='progress-bar progress-bar-striped' role='progressbar' style='width:0%'>0%</div>
-        </div>
-      </div>
-
-      <!-- Route container. -->
-      <div id='containerRoute' class='hidden'>
-        <h4>Route</h4>
-        <div id='messageRoute' class='alert alert-primary' role='alert'>
-          No route created.
-        </div>
-        <div id='contentRoute' class='hidden'>
-          <h5>String</h5>
-          <p id='routeString'></p>
-
-          <h5>Table</h5>
-          <table id='routeTable' class='table table-borderless text-center'>
-            <thead>
+        </section>
+  
+        <!-- Filter container -->
+        <section id="containerFilter" class="hidden">
+          <h3>Filter</h3>
+          <div id="spinner" class="text-center hidden" aria-live="polite">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <div id="contentFilter" class="hidden">
+            <div class="alert alert-success" role="alert" aria-live="polite">
+              Imported <strong id="excelRowCount">0</strong> listings from <strong id="excelFileName">filename</strong>.
+            </div>
+            <div id="filterCheckboxes" class="mb-2">
+              <p class="mb-2">Select the listing statuses to include:</p>
+              <!-- Checkboxes would be dynamically inserted here -->
+            </div>
+            <p class="mb-2"><strong>Note:</strong> Each listing will cost a geocoding API request.</p>
+            <button id="buttonNext" class="btn btn-primary mt-2">Next <i class="fas fa-chevron-right"></i></button>
+          </div>
+        </section>
+  
+        <!-- Geocode container -->
+        <section id="containerGeocode" class="hidden">
+          <h3>Geocode</h3>
+          <p class="mb-2">Locating MLS listings...</p>
+          <div class="progress">
+            <div id="progressBar" class="progress-bar progress-bar-striped" role="progressbar" style="width:0%">0%</div>
+          </div>
+        </section>
+  
+        <!-- Route container -->
+        <section id="containerRoute" class="hidden">
+          <h3>Route</h3>
+          <div id="messageRoute" class="alert alert-primary" role="alert" aria-live="polite">
+            No route created.
+          </div>
+          <div id="contentRoute" class="hidden">
+            <h4>String</h4>
+            <p id="routeString"></p>
+  
+            <h4>Table</h4>
+            <table id="routeTable" class="table table-borderless text-center">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Tax Address</th>
+                  <th scope="col">Status</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody id="routeTableBody"></tbody>
+            </table>
+            <!-- <button id="buttonBack" class="btn btn-secondary"><i class="fas fa-chevron-left"></i> Back</button> -->
+          </div>
+        </section>
+      </section>
+   
+      <!-- Right panel -->
+      <section class="col-md-8">
+        <div id="map" class="mb-3"></div>
+  
+        <!-- Actions container -->
+        <div id="containerActions" class="hidden">
+          <button id="buttonCopyString" class="btn btn-primary"><i class="fas fa-clipboard"></i> Copy String</button>
+          <button id="buttonCopyDirections" class="btn btn-primary"><i class="fas fa-clipboard"></i> Copy Directions</button>
+          <button id="buttonSavePdf" class="btn btn-danger"><i class="fas fa-file-pdf"></i> Save PDF</button>
+          <button id="buttonSaveMap" class="btn btn-success"><i class="fas fa-map"></i> Save Map</button>
+          
+          <h4 class="mt-4">Listing Information</h4>
+          <table class="table table-borderless tableListingInformation">
+            <tbody>
               <tr>
-                <th scope='col'></th>
-                <th scope='col'>Tax Address</th>
-                <th scope='col'>Status</th>
-                <th scope='col'></th>
+                <th>MLS ID:</th>
+                <td id="tMlsId"></td>
+                <th>Status Change Date:</th>
+                <td id="tStatusChangeDate"></td>
               </tr>
-            </thead>
-            <tbody id='routeTableBody'></tbody>
+              <tr>
+                <th>Full Name:</th>
+                <td id="tFullName"></td>
+                <th>Listing Status:</th>
+                <td id="tListingStatus"></td>
+              </tr>
+              <tr>
+                <th>Tax Address:</th>
+                <td id="tTaxAddress"></td>
+                <th>Address:</th>
+                <td id="tAddress"></td>
+              </tr>            
+              <tr>
+                <th>Phone:</th>
+                <td id="tPhone"></td>
+                <th>Days On Market:</th>
+                <td id="tDaysOnMarket"></td>
+              </tr>
+              <tr>
+                <th>Email:</th>
+                <td id="tEmail"></td>
+                <th>List Price:</th>
+                <td id="tListPrice"></td>
+              </tr>
+              <tr>
+                <th>Property Type:</th>
+                <td id="tPropertyType"></td>
+                <th>Last Call Result:</th>
+                <td id="tLastCallResult"></td>
+              </tr>
+            </tbody>
           </table>
-          <!-- <button id='buttonBack' class='btn btn-secondary'><i class="fa fa-chevron-left"></i>&ensp;Back</button> -->
-        </div>
-      </div>
-    </div>
- 
-    <!-- Right panel. -->
-    <div class='col-md-8'>
-      <div id='map' class='mb-3'></div>
-
-      <!-- Actions container. -->
-      <div id='containerActions' class='hidden'>
-        <button id='buttonCopyString' class='btn btn-primary'><i class="fa fa-clipboard"></i>&ensp;Copy String</button>
-        <button id='buttonCopyDirections' class='btn btn-primary'><i class="fa fa-clipboard"></i>&ensp;Copy Directions</button>
-        <button id='buttonSavePdf' class='btn btn-danger'><i class="fa fa-file-pdf-o"></i>&ensp;Save PDF</button>
-        <a id='buttonSaveMap' class='btn btn-success' href='#'>
-          <i class="fa fa-map"></i>&ensp;Save Map
-        </a>
+          <p><strong>Notes:</strong> <span id="tNotes"></span></p>
         
-        <h4 class='mt-4'>Listing Information</h4>
-        <table class='table table-borderless tableListingInformation'>
-          <tbody>
-            <tr>
-              <th>MLS ID:</th>
-              <td id='tMlsId'></td>
-              <th>Status Change Date:</th>
-              <td id='tStatusChangeDate'></td>
-            </tr>
-            <tr>
-              <th>Full Name:</th>
-              <td id='tFullName'></td>
-              <th>Listing Status:</th>
-              <td id='tListingStatus'></td>
-            </tr>
-            <tr>
-              <th>Tax Address:</th>
-              <td id='tTaxAddress'></td>
-              <th>Address:</th>
-              <td id='tAddress'></td>
-            </tr>            
-            <tr>
-              <th>Phone:</th>
-              <td id='tPhone'></td>
-              <th>Days On Market:</th>
-              <td id='tDaysOnMarket'></td>
-            </tr>
-            <tr>
-              <th>Email:</th>
-              <td id='tEmail'></td>
-              <th>List Price:</th>
-              <td id='tListPrice'></td>
-            </tr>
-            <tr>
-              <th>Property Type:</th>
-              <td id='tPropertyType'></td>
-              <th>Last Call Result:</th>
-              <td id='tLastCallResult'></td>
-            </tr>
-          </tbody>
-        </table>
-        <p><b>Notes:</b> <span id='tNotes'></span></p>
-      
-        <!-- Agent and VA dropdowns -->
-        <h4 class="mt-4">Agent and VA</h4>
-        <div class="form-group">
-          <label for="selectAgent">Select Agent:</label>
-          <select id="selectAgent" class="form-control">
-            <option value="Hector">Hector</option>
-            <option value="Elsa">Elsa</option>
-          </select>
+          <!-- Agent and VA dropdowns -->
+          <h4 class="mt-4">Agent and VA</h4>
+          <div class="form-group">
+            <label for="selectAgent">Select Agent:</label>
+            <select id="selectAgent" class="form-control" aria-label="Select Agent">
+              <option value="Hector">Hector</option>
+              <option value="Elsa">Elsa</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="selectVA">Select VA:</label>
+            <select id="selectVA" class="form-control" aria-label="Select VA">
+              <option value="Saqib">Saqib</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+  
         </div>
-        <div class="form-group">
-          <label for="selectVA">Select VA:</label>
-          <select id="selectVA" class="form-control">
-            <option value="Saqib">Saqib</option>
-            <option value="Other">Other</option>
-          </select>
+      </section>
+    </div>
+  
+    <!-- Footer -->
+    <footer>
+      <div class="row text-center mt-3">
+        <div class="col">
+          <a href="https://sef.mlsmatrix.com" target="_blank" rel="noopener noreferrer">MLS Matrix</a>&emsp;|&emsp;
+          <a href="https://console.cloud.google.com/google/maps-apis/overview" target="_blank" rel="noopener noreferrer">Google Maps Platform Usage</a>&emsp;|&emsp;
+          <a href="https://mapsplatformtransition.withgoogle.com/calculator" target="_blank" rel="noopener noreferrer">Google Maps Platform Calculator</a>
+          <p class="mt-4">
+            &copy; 2024 <a href="https://www.upwork.com/freelancers/~011510620658de6d0a" target="_blank" rel="noopener noreferrer">Saqib Ellahi</a>.
+            <br>Made with <i class="fas fa-heart text-danger" aria-label="heart"></i> in Jhelum.
+          </p>
         </div>
-
       </div>
-    </div>
-  </div>
-
-  <!-- Footer. -->
-  <div class='row text-center mt-3'>
-    <div class='col'>
-      <a href='https://sef.mlsmatrix.com' target='_blank'>MLS Matrix</a>&emsp;|&emsp;
-      <a href='https://console.cloud.google.com/google/maps-apis/overview' target='_blank'>Google Maps Platform Usage</a>&emsp;|&emsp;
-      <a href='https://mapsplatformtransition.withgoogle.com/calculator' target='_blank'>Google Maps Platform Calculator</a>
-      <p class='mt-4'>Copyright &copy; 2024 <a href='https://www.upwork.com/freelancers/~011510620658de6d0a' target='_blank'>Saqib Ellahi</a>.
-        <br>Made with <i class='fa fa-heart text-danger'></i> in Jhelum.</p>
-    </div>
-  </div>
-</div>
-
-<!-- Framework scripts. -->
-<script src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js' integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1' crossorigin='anonymous'></script>
-<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js' integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM' crossorigin='anonymous'></script>
-
-<!-- Google Maps scripts. -->
-<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBwSa6Uh7iNeTCjFC7CQMWQGYUePeCuVls'></script>
-
-<!-- Library scripts. -->
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js' integrity='sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/' crossorigin='anonymous'></script>
-<script src='https://unpkg.com/jspdf-autotable@3.1.1/dist/jspdf.plugin.autotable.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js'></script>
-<script src='https://underscorejs.org/underscore-min.js'></script>
-
-<!-- App scripts. -->
-<script src='js/global.js'></script>
-<script src='js/app.js'></script>
-
-<script src='js/data/cacheData.js'></script>
-<script src='js/data/processData.js'></script>
-<script src='js/data/readData.js'></script>
-<script src='js/data/readMapFile.js'></script>
-
-<script src='js/interface/appendListingStatusFilter.js'></script>
-<script src='js/interface/setGreeting.js'></script>
-<script src='js/interface/setListingInfo.js'></script>
-<script src='js/interface/setMapFile.js'></script>
-<script src='js/interface/setProgress.js'></script>
-<script src='js/interface/setRouteString.js'></script>
-<script src='js/interface/setRouteTable.js'></script>
-
-<script src='js/map/createMap.js'></script>
-<script src='js/map/geocodeMap.js'></script>
-<script src='js/map/populateMap.js'></script>
-<script src='js/map/removeStop.js'></script>
-<script src='js/map/updateDirections.js'></script>
-
-<script src='js/utils/createPDF.js'></script>
-<script src='js/utils/storage.js'></script>
-
+    </footer>
+  </main>
+  
+  <!-- Framework scripts -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous" defer></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous" defer></script>
+  
+  <!-- Google Maps scripts -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwSa6Uh7iNeTCjFC7CQMWQGYUePeCuVls" defer></script>
+  
+  <!-- Library scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/jspdf-autotable@3.1.1/dist/jspdf.plugin.autotable.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js" defer></script>
+  <script src="https://underscorejs.org/underscore-min.js" defer></script>
+  
+  <!-- App scripts -->
+  <script src="js/global.js" defer></script>
+  <script src="js/app.js" defer></script>
+  
+  <script src="js/data/cacheData.js" defer></script>
+  <script src="js/data/processData.js" defer></script>
+  <script src="js/data/readData.js" defer></script>
+  <script src="js/data/readMapFile.js" defer></script>
+  
+  <script src="js/interface/appendListingStatusFilter.js" defer></script>
+  <script src="js/interface/setGreeting.js" defer></script>
+  <script src="js/interface/setListingInfo.js" defer></script>
+  <script src="js/interface/setMapFile.js" defer></script>
+  <script src="js/interface/setProgress.js" defer></script>
+  <script src="js/interface/setRouteString.js" defer></script>
+  <script src="js/interface/setRouteTable.js" defer></script>
+  
+  <script src="js/map/createMap.js" defer></script>
+  <script src="js/map/geocodeMap.js" defer></script>
+  <script src="js/map/populateMap.js" defer></script>
+  <script src="js/map/removeStop.js" defer></script>
+  <script src="js/map/updateDirections.js" defer></script>
+  
+  <script src="js/utils/createPDF.js" defer></script>
+  <script src="js/utils/storage.js" defer></script>
+  
 </body>
 </html>
