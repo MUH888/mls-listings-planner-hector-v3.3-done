@@ -1,6 +1,6 @@
-function populateMap (listings) {
+function populateMap(listings) {
   listings.forEach(function (l) {
-    var m = new google.maps.Marker({
+    const m = new google.maps.Marker({
       map: map,
       title: l.taxAddress,
       position: l.latLng,
@@ -9,7 +9,7 @@ function populateMap (listings) {
 
     m.addListener('click', function () {
       // Check if the marker is already in the stopArray
-      var exists = stopArray.getArray().some(function (stop) {
+      const exists = stopArray.getArray().some(function (stop) {
         return stop.mlsId === l.mlsId;
       });
 

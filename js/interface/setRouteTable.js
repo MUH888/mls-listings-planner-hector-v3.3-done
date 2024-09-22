@@ -1,31 +1,32 @@
-function setRouteTable () {
+function setRouteTable() {
   $('#routeTableBody').html(''); 
 
-  if (stopArray.getLength() === 0)
+  if (stopArray.getLength() === 0) {
     return;
+  }
 
   stopArray.forEach(function (s, i) {
-    var $tr = $('<tr />');
+    const $tr = $('<tr />');
 
-    var $tdLetter = $('<td />')
+    const $tdLetter = $('<td />')
       .attr('scope', 'col')
       .css('text-align', 'left') // Align text to the left
       .text(letters[i]);
-    var $tdTaxAddress = $('<td />') // Changed from MLS ID to Tax Address
+    const $tdTaxAddress = $('<td />') // Changed from MLS ID to Tax Address
       .attr('scope', 'col')
       .css('text-align', 'left') // Align text to the left
       .text(s.listing.taxAddress.replace(/,([^,]*,[^,]*$)/, '$1')) // This line changes the value from MLS ID to Tax Address
       .mouseover(function () {
         setListingInfo(stopArray.getAt(i).listing);
       });
-    var $tdStatus = $('<td />')
+    const $tdStatus = $('<td />')
       .attr('scope', 'col')
       .css('text-align', 'left') // Align text to the left
       .text(s.listingStatus);
-    var $tdClose = $('<td />')
+    const $tdClose = $('<td />')
       .attr('scope', 'col')
       .css('text-align', 'left'); // Align text to the left
-    var $tdCloseButton = $('<button />')
+    const $tdCloseButton = $('<button />')
       .attr('type', 'button')
       .attr('class', 'close')
       .attr('value', i)

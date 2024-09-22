@@ -1,5 +1,5 @@
-function readMapFile (file, callback) {
-  var reader = new FileReader();
+function readMapFile(file, callback) {
+  const reader = new FileReader();
 
   reader.onload = function (e) {
     callback(null, JSON.parse(e.target.result));

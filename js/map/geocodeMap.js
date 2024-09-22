@@ -1,24 +1,25 @@
-function geocodeMap (listings, callback) {
-  var promises = [];
+function geocodeMap(listings, callback) {
+  const promises = [];
 
-  for (var i = 0; i < listings.length; i++)
+  for (let i = 0; i < listings.length; i++) {
     promises.push(geocodePromise(listings[i], (1 / listings.length) * 100, i + 1));
+  }
 
   Promise.all(promises).then(function (listings) {
     callback(listings.filter(function (l) {
       return l.latLng ? true : false;
     }));
-  }).catch(function (err) { 
+  }).catch(function (err) {
     console.log(err);
   });
 }
 
-function geocodePromise (listing, progress, timeout) {
-  return new Promise (function (resolve, reject) {
+function geocodePromise(listing, progress, timeout) {
+  return new Promise(function (resolve, reject) {
     setTimeout(function () {
       geocoder.geocode({ 'address': listing.taxAddress }, function (results, status) {
         console.log(status);
-        var l = listing;
+        let l = listing;
         setProgress(progress);
         if (status === google.maps.GeocoderStatus.OK) {
           l.latLng = results.length > 0 ? results[0].geometry.location : null;

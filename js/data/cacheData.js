@@ -1,4 +1,4 @@
-function cacheData (newData) {
-  var newCache = _.extend(cache, newData);
+function cacheData(newData) {
+  const newCache = _.extend(cache, newData);
   setStorageValue('cache', newCache);
 }

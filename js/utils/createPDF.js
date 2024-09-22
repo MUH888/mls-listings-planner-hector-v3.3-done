@@ -1,12 +1,12 @@
 function createPDF() {
-    var pdf = new jsPDF('p', 'mm', 'letter');
-    var date = new Date();
-    var formattedDate = date.toISOString().slice(0, 10); // Format date as YYYY-MM-DD
-    var y = 20;
+    const pdf = new jsPDF('p', 'mm', 'letter');
+    const date = new Date();
+    const formattedDate = date.toISOString().slice(0, 10); // Format date as YYYY-MM-DD
+    let y = 20;
     
     // Retrieve the selected Agent and VA values
-    var agentName = document.getElementById('selectAgent').value;
-    var vaName = document.getElementById('selectVA').value;
+    const agentName = document.getElementById('selectAgent').value;
+    const vaName = document.getElementById('selectVA').value;
     
     pdf.setProperties({
         title: 'Report-' + formattedDate,
@@ -26,13 +26,13 @@ function createPDF() {
     pdf.text(10, y, 'Stops');
     y += 4;
 
-    var stopsHead = [
+    const stopsHead = [
         ['', 'Tax Address', 'Listing Status', 'Notes'],
     ];
-    var stopsPerPage = 4; // Limit to 4 stops per page
-    var stopCounter = 0; // Counter for stops
-    var stopsBody = [];
-    var pageCounter = 1; // To track the page number for the stops table
+    const stopsPerPage = 4; // Limit to 4 stops per page
+    let stopCounter = 0; // Counter for stops
+    let stopsBody = [];
+    let pageCounter = 1; // To track the page number for the stops table
 
     stopArray.forEach(function (s, i) {
         // Add stop data to the stopsBody array
@@ -95,21 +95,21 @@ function createPDF() {
     y += 10;
 
     pdf.setFontSize(11);
-    var tab = 0;
+    let tab = 0;
     stopArray.forEach(function (s) {
-        var width = pdf.getTextDimensions(s.listing.address.replace(/,([^,]*,[^,]*$)/, '$1')).w;
+        const width = pdf.getTextDimensions(s.listing.address.replace(/,([^,]*,[^,]*$)/, '$1')).w;
         if (width > tab)
             tab = width;
     });
 
     pdf.setFontSize(11);
-    pdf.setFontStyle('bold');
+    pdf.setFont('helvetica', 'bold');
     pdf.text(25, y, 'Tax Address');
     pdf.text(25 + tab + 20, y, 'Subject Address'); // Increased space between columns
     y += 6;
 
     pdf.setFontSize(11);
-    pdf.setFontStyle('normal');
+    pdf.setFont('helvetica', 'normal');
     stopArray.forEach(function (s, i) {
         pdf.text(15, y, (i + 1).toString()); // Rank by number
 
@@ -131,18 +131,18 @@ function createPDF() {
     pdf.text(10, y, 'Listing Information');
     y += 4;
 
-    var listingsHeader = [
+    const listingsHeader = [
         ['', 'Name', 'Listing Status', 'Price', 'Last Call Result']
     ];
-    var listingsBody = [];
+    const listingsBody = [];
 
-    var notesHeader = [
+    const notesHeader = [
         ['', 'Notes']
     ];
-    var notesBody = [];
+    const notesBody = [];
 
     stopArray.forEach(function (s, i) {
-        var l = s.listing;
+        const l = s.listing;
         listingsBody.push([
             (i + 1).toString(), // Rank by number
             l.fullName,
@@ -194,7 +194,7 @@ function createPDF() {
     });
 
     // After adding all content, calculate the total number of pages
-    var totalPages = pdf.internal.getNumberOfPages();
+    const totalPages = pdf.internal.getNumberOfPages();
 
     // Loop through each page to add the footer
     for (let i = 1; i <= totalPages; i++) {
@@ -207,12 +207,12 @@ function createPDF() {
 
     // Footer function
     function addFooter(pageNumber, totalPages) {
-    // Left side: "Created" label in bold with the date
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'bold'); // Set font to bold
-    pdf.text(20, pdf.internal.pageSize.height - 10, 'Created:');
-    pdf.setFont('helvetica', 'normal'); // Revert font to normal
-    pdf.text(36, pdf.internal.pageSize.height - 10, formattedDate);
+        // Left side: "Created" label in bold with the date
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'bold'); // Set font to bold
+        pdf.text(20, pdf.internal.pageSize.height - 10, 'Created:');
+        pdf.setFont('helvetica', 'normal'); // Revert font to normal
+        pdf.text(36, pdf.internal.pageSize.height - 10, formattedDate);
 
         // Center: Agent Name | VA Name (larger font size)
         pdf.setFontSize(12);

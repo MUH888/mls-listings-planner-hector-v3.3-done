@@ -6,30 +6,27 @@ function formatAddress(address) {
 function setRouteString() {
   $('#routeString').html('');
 
-  if (stopArray.getLength() === 0)
+  if (stopArray.getLength() === 0) {
     return;
+  }
 
-  var string = '';
+  let string = '';
   stopArray.forEach(function (s, i) {
-    var formattedAddress = formatAddress(s.listing.taxAddress);
-    if (i === stopArray.length - 1)
+    const formattedAddress = formatAddress(s.listing.taxAddress);
+    if (i === stopArray.length - 1) {
       string += formattedAddress; // Use formattedAddress without a trailing comma
-    else
+    } else {
       string += formattedAddress + ', '; // Use formattedAddress with a trailing comma
+    }
   });
 
-  var directions = '';
+  let directions = '';
   stopArray.forEach(function (s, i) {
-    var formattedAddress = formatAddress(s.listing.taxAddress);
+    const formattedAddress = formatAddress(s.listing.taxAddress);
     if (i === stopArray.length - 1) {
-      directions += letters[i]
-        + ': '
-        + encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + formattedAddress); // Use formattedAddress
+      directions += letters[i] + ': ' + encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + formattedAddress); // Use formattedAddress
     } else {
-      directions += letters[i]
-        + ': '
-        + encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + formattedAddress) // Use formattedAddress
-        + '\n';
+      directions += letters[i] + ': ' + encodeURI('https://www.google.com/maps/dir/?api=1&destination=' + formattedAddress) + '\n'; // Use formattedAddress
     }
   });
 

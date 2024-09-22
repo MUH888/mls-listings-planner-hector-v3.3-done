@@ -1,10 +1,11 @@
-function updateDirections () {
+function updateDirections() {
 
   if (stopArray.getLength() <= 1) {
     directionsDisplay.setMap(null);
     return;
   }
-  var waypoints = [];
+
+  const waypoints = [];
 
   stopArray.forEach(function (stop, i) {
     if (i !== 0 && i !== stopArray.getLength() - 1) {
@@ -23,7 +24,7 @@ function updateDirections () {
     waypoints: waypoints,
     optimizeWaypoints: true,
     travelMode: 'DRIVING'
-  }, function(response, status) {
+  }, function (response, status) {
     if (status === 'OK') {
       directionsDisplay.setDirections(response);
     } else {

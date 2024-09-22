@@ -1,4 +1,4 @@
-function createMap (elementId) {
+function createMap(elementId) {
   
   map = new google.maps.Map(document.getElementById(elementId), {
     center: { lat: 25.763, lng: -80.193 },  // Miami, FL.
@@ -12,16 +12,16 @@ function createMap (elementId) {
   markers = [];
 
   stopArray = new google.maps.MVCArray();
-  directionsService = new google.maps.DirectionsService;
+  directionsService = new google.maps.DirectionsService();
   directionsDisplay = new google.maps.DirectionsRenderer({ 
     preserveViewport: true
   });
 
-  var resetControlDiv = document.createElement('div');
-  var resetControl = new ResetControl(resetControlDiv);
+  const resetControlDiv = document.createElement('div');
+  const resetControl = new ResetControl(resetControlDiv);
 
-  var undoControlDiv = document.createElement('div');
-  var undoControl = new UndoControl(undoControlDiv);
+  const undoControlDiv = document.createElement('div');
+  const undoControl = new UndoControl(undoControlDiv);
 
   resetControlDiv.index = 1;
   undoControlDiv.index = 1;
@@ -29,7 +29,6 @@ function createMap (elementId) {
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(undoControlDiv);
 
   directionsDisplay.addListener('directions_changed', function () {
-    //console.log('Directions changed.');
     if (stopArray.length === 0) {
       $('#messageRoute').removeClass('hidden');
       $('#contentRoute').addClass('hidden');
@@ -43,9 +42,9 @@ function createMap (elementId) {
   });
 }
 
-function UndoControl (undoDiv) {
+function UndoControl(undoDiv) {
   // Set CSS for the control border.
-  var undoButton = document.createElement('div');
+  const undoButton = document.createElement('div');
   undoButton.style.backgroundColor = '#fff';
   undoButton.style.border = '2px solid #fff';
   undoButton.style.borderRadius = '3px';
@@ -59,7 +58,7 @@ function UndoControl (undoDiv) {
   undoDiv.appendChild(undoButton);
 
   // Set CSS for the control interior.
-  var undoText = document.createElement('div');
+  const undoText = document.createElement('div');
   undoText.style.color = 'rgb(25,25,25)';
   undoText.style.fontFamily = 'Roboto,Arial,sans-serif';
   undoText.style.fontSize = '16px';
@@ -80,9 +79,9 @@ function UndoControl (undoDiv) {
   });
 }
 
-function ResetControl (resetDiv) {
+function ResetControl(resetDiv) {
   // Set CSS for the control border.
-  var resetButton = document.createElement('div');
+  const resetButton = document.createElement('div');
   resetButton.style.backgroundColor = '#fff';
   resetButton.style.border = '2px solid #fff';
   resetButton.style.borderRadius = '3px';
@@ -96,7 +95,7 @@ function ResetControl (resetDiv) {
   resetDiv.appendChild(resetButton);
 
   // Set CSS for the control interior.
-  var resetText = document.createElement('div');
+  const resetText = document.createElement('div');
   resetText.style.color = 'rgb(25,25,25)';
   resetText.style.fontFamily = 'Roboto,Arial,sans-serif';
   resetText.style.fontSize = '16px';

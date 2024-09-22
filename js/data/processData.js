@@ -19,7 +19,7 @@ function formatPrice(price) {
 }
 
 function processData(excelData) {
-  var data = {
+  let data = {
     listingStatus: [],
     listingsByStatus: {},
     listings: []
